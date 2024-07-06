@@ -1,5 +1,16 @@
 #pragma once
 
+/*
+ *
+ * DebugLogger is a collection of global variadic templated functions 
+ * with different overload options(color, time/date, and more to come).
+ * The functionalities get compiled ONLY when DEBUG_MODE is defined in CMake,
+ * otherwise the funcitons bodies are compiled empty to avoid Debug Logs in RELEASE_MODE.
+ * DebugLogger is planned to be a 'core' header that every class in the engine will have
+ * so the debug colors will be visiable unless I put the file in a namespace.
+ *
+ */
+
 #ifdef DEBUG_MODE
 #include <iostream>
 #include <chrono>
@@ -8,7 +19,7 @@
 #include <tuple>
 #include <cinttypes>
 
-/* Supported Debug Log Colors */
+/* Supported Debug Colors */
 enum EDebugColors : uint8_t
 {
     Red,
@@ -126,7 +137,7 @@ void Debug_Print(Args&&... args)
     ([&]
     {
         std::string color_code = Ansi_To_Tuple(EDebugColors::White);
-        // \033[m -> eding color tag
+        // \033[m -> ending color tag
         std::cout << ">>> " << color_code << args << "\033[m" << std::endl;
     } (), ...);
 #endif
@@ -151,7 +162,7 @@ void Debug_Print(EDebugColors color, bool bPrintTime, Args&&... args)
     ([&]
     {
         std::string color_code = Ansi_To_Tuple(color);
-        // \033[m -> eding color tag
+        // \033[m -> ending color tag
         std::cout << ">>> " << color_code << args << "\033[m" << std::endl;
     } (), ...);
 #endif
