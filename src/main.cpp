@@ -1,8 +1,10 @@
 #include <GLFW/glfw3.h>
+#include "plugins/DebugLogger.h"
 
 int main(void)
 {
     GLFWwindow* window;
+    Debug_Print("Starting Cherry Engine", " :)");
 
     /* Initialize the library */
     if (!glfwInit())
