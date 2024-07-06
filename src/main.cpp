@@ -5,7 +5,8 @@ int main(void)
 {
     GLFWwindow* window;
     Debug_Print(EDebugColors::Magenta, "Starting Cherry Engine", ":)");
-    Debug_Print(EDebugColors::White, "Hi cutie");
+    Debug_Print(EDebugColors::Yellow, false, "Some hot stuff", ":)");
+    Debug_Print("Hi cutie");
 
     /* Initialize the library */
     if (!glfwInit())
