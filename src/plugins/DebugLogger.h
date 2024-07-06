@@ -9,6 +9,10 @@
  * DebugLogger is planned to be a 'core' header that every class in the engine will have
  * so the debug colors will be visiable unless I put the file in a namespace.
  *
+ * !!! WARNINGS !!!
+ * The functions SHOULD NOT be used for production code (RELEASE_MODE)
+ * as they are only compiled in DEBUG_MODE
+ *
  */
 
 #ifdef DEBUG_MODE
