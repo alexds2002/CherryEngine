@@ -8,6 +8,14 @@ set(GLFW_INCLUDE_PATH "D:/OpenGL/include/glfw32/include")
 include_directories(${GLFW_INCLUDE_PATH})
 include_directories(${OPENGL_INCLUDE_DIRS})
 
+# Build types are
+# Debug
+# Release
+if (NOT CMAKE_BUILD_TYPE STREQUAL "")
+    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+    add_compile_definitions("${CMAKE_BUILD_TYPE}_MODE")
+endif()
+
 add_subdirectory(glfw)
 
 option(GLFW-CMAKE-STARTER-USE-GLFW-GLAD "Use GLAD from GLFW" ON)
@@ -17,7 +25,6 @@ if( GLFW-CMAKE-STARTER-USE-GLFW-GLAD )
 endif()
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
-
 add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${GLAD_GL})
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw)
