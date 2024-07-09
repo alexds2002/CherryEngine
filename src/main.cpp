@@ -1,12 +1,12 @@
 #include <GLFW/glfw3.h>
-#include "plugins/DebugLogger.h"
+#include "plugins/debug_logger_component.h"
 
 int main(void)
 {
     GLFWwindow* window;
-    Debug_Print(EDebugColors::Magenta, "Starting Cherry Engine", ":)");
-    Debug_Print(EDebugColors::Yellow, false, "Some hot stuff", ":)");
-    Debug_Print("Hi cutie");
+    Debug_Log(EDebugColors::Magenta, "Starting Cherry Engine", ":)");
+    Debug_Log(EDebugColors::Yellow, true, "Some hot stuff", ":)");
+    Debug_Log("Hi cutie");
 
     /* Initialize the library */
     if (!glfwInit())
