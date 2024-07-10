@@ -2,17 +2,19 @@
 
 /*
  *
- * DebugLogger is a collection of global variadic templated functions
+ * debug_logger_component is a collection of global variadic templated functions
  * with different overload options(color, time/date, and more to come).
  * The functionalities get compiled ONLY when DEBUG_MODE is defined in CMake,
  * otherwise the funcitons bodies are compiled empty to avoid Debug Logs in RELEASE_MODE.
- * DebugLogger is planned to be a 'core' header that every class in the engine will have
+ * debug_logger_component is planned to be a 'core' header that every class in the engine will have
  * so the debug colors will be visiable unless I put the file in a namespace.
  *
  * !!! WARNINGS !!!
- * Debug functions SHOULD NOT be used for production code (RELEASE_MODE)
+ * Debug functions SHOULD NOT be used for production purposes (RELEASE_MODE)
  * as they are only compiled in DEBUG_MODE -> CMAKE_BUILD_TYPE=Debug
- * However you do not need to delete them
+ * However you do not need to delete them when shipping.
+ * (BUG warning)inline global function with external linkage have undefined behavior
+ * fix is to remove inline then the compilation will crash becouse of redefinition.
  *
  */
 
@@ -185,7 +187,7 @@ std::string Ansi_To_Tuple(const EDebugColors color) noexcept
  * @return void
  */
 template<class... Args>
-static inline void Debug_Log(Args&&... args)
+inline void Debug_Log(Args&&... args)
 {
 #ifdef DEBUG_MODE
 #if (_WIN32_VERSION && _WIN32_VERSION < 10) // windows versions before 10 do not support ANSI
@@ -219,7 +221,7 @@ static inline void Debug_Log(Args&&... args)
  * @return void
  */
 template<class... Args>
-static inline void Debug_Log(const EDebugColors color, Args&&... args)
+inline void Debug_Log(const EDebugColors color, Args&&... args)
 {
 #ifdef DEBUG_MODE
 #if (_WIN32_VERSION && _WIN32_VERSION < 10) // windows versions before 10 do not support ANSI
@@ -236,7 +238,7 @@ static inline void Debug_Log(const EDebugColors color, Args&&... args)
         std::cout << ">>> " << color_code << args << UNIX_COLOR_END_TAG << std::endl;
     } (), ...);
 #else
-#error Unsuported operation system trying to print (DebugLogger.h)!
+#error Unsuported operation system trying to print!
 #endif /* __linux__ && _WIN32_VERSION < 10 */
 #endif /* DEBUG_MODE */
 }
@@ -254,7 +256,7 @@ static inline void Debug_Log(const EDebugColors color, Args&&... args)
  * @return void
  */
 template<class... Args>
-static inline void Debug_Log(const EDebugColors color, const bool bShowTime, Args&&... args)
+inline void Debug_Log(const EDebugColors color, const bool bShowTime, Args&&... args)
 {
 #ifdef DEBUG_MODE
     if(bShowTime)
@@ -277,7 +279,7 @@ static inline void Debug_Log(const EDebugColors color, const bool bShowTime, Arg
         std::cout << ">>> " << color_code << args << UNIX_COLOR_END_TAG << std::endl;
     } (), ...);
 #else
-#error Unsuported operation system trying to print (DebugLogger.h)!
+#error Unsuported operation system trying to print!
 #endif /* __linux__ && _WIN32_VERSION < 10 */
 #endif /* DEBUG_MODE */
 }

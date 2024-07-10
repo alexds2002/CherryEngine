@@ -15,7 +15,7 @@
  * Limited to 256 colors
  *
  * !!! WARNINGS !!!
- * Lives outside DEBUG_MODE so that people dont have to worry
+ * Lives outside DEBUG_MODE so that people do not have to worry
  * about deleting debug logs for releases
  * only the function definition will be compiled
  * and called with empty body

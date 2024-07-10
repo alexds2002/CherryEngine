@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
-#include "plugins/debug_logger_component.h"
+#include <debug_mode_definitions.h>
+#include <debug_logger_component.h>
 
 int main(void)
 {
@@ -7,6 +8,7 @@ int main(void)
     Debug_Log(EDebugColors::Magenta, "Starting Cherry Engine", ":)");
     Debug_Log(EDebugColors::Yellow, true, "Some hot stuff", ":)");
     Debug_Log("Hi cutie");
+    DebugOnly::Ansi_To_Tuple(EDebugColors::White);
 
     /* Initialize the library */
     if (!glfwInit())

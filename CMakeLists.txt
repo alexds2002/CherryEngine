@@ -30,6 +30,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp
 add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${GLAD_GL})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/project_definitions)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/components)
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glfw)
 target_link_libraries(${PROJECT_NAME} OpenGL::GL)
