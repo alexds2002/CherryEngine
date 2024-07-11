@@ -186,22 +186,12 @@ template<class... Args>
 inline void Debug_Log(Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
-#if defined (_WIN32_VERSION) && (_WIN32_VERSION < 10) // windows versions before 10 do not support ANSI
-    HANDLE _hndl = GetStdHandle(STD_OUTPUT_HANDLE);
+    std::cout << ">>> ";
     ([&]
     {
-        SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(EDebugColors::White)));
-        std::cout << ">>> " << args << std::endl;
+        std::cout << args;
     } (), ...);
-#elif defined (__linux__) || defined (_WIN32) // windows versions over 8 support ANSI
-    ([&]
-    {
-        std::string color_code = DebugOnly::Ansi_To_Tuple(EDebugColors::White);
-        std::cout << ">>> " << color_code << args << UNIX_COLOR_END_TAG << std::endl;
-    } (), ...);
-#else
-#error Unsuported operation system trying to print
-#endif /* __linux__ && _WIN32_VERSION < 10 */
+    std::cout << std::endl;
 #endif /* DEBUG_MODE */
 }
 
@@ -224,17 +214,22 @@ inline void Debug_Log(const EDebugColors color, Args&&... args) noexcept
 #ifdef DEBUG_MODE
 #if defined (_WIN32_VERSION) && (_WIN32_VERSION < 10) // windows versions before 10 do not support ANSI
     HANDLE _hndl = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(color));
+    std::cout << ">>> ";
     ([&]
     {
-        SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(color)));
-        std::cout << ">>> " << args << std::endl;
+        std::cout << args;
     } (), ...);
+    SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(EDebugColors::White));
+    std::cout << std::endl;
 #elif defined (__linux__) || defined (_WIN32) // windows versions over 8 support ANSI
+    std::string color_code = DebugOnly::Ansi_To_Tuple(color);
+    std::cout << ">>> " << color_code;
     ([&]
     {
-        std::string color_code = DebugOnly::Ansi_To_Tuple(color);
-        std::cout << ">>> " << color_code << args << UNIX_COLOR_END_TAG << std::endl;
+        std::cout << args;
     } (), ...);
+    std::cout << UNIX_COLOR_END_TAG << std::endl;
 #else
 #error Unsuported operation system trying to print!
 #endif /* __linux__ && _WIN32_VERSION < 10 */
@@ -267,17 +262,22 @@ inline void Debug_Log(const EDebugColors color, const bool bShowTime, Args&&... 
     }
 #if defined (_WIN32_VERSION) && (_WIN32_VERSION < 10) // windows versions before 10 do not support ANSI
     HANDLE _hndl = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(color));
+    std::cout << ">>> ";
     ([&]
     {
-        SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(color)));
-        std::cout << ">>> " << args << std::endl;
+        std::cout << args;
     } (), ...);
+    SetConsoleTextAttribute(_hndl, DebugOnly::Windows_Color_To_Code(EDebugColors::White));
+    std::cout << std::endl;
 #elif defined (__linux__) || defined (_WIN32) // windows versions over 8 support ANSI
+    std::string color_code = DebugOnly::Ansi_To_Tuple(color);
+    std::cout << ">>> " << color_code;
     ([&]
     {
-        std::string color_code = DebugOnly::Ansi_To_Tuple(color);
-        std::cout << ">>> " << color_code << args << UNIX_COLOR_END_TAG << std::endl;
+        std::cout << args;
     } (), ...);
+    std::cout << UNIX_COLOR_END_TAG << std::endl;
 #else
 #error Unsuported operation system trying to print!
 #endif /* __linux__ && _WIN32_VERSION < 10 */
