@@ -6,3 +6,4 @@ int main(int argc, char* argv[])
     Debug_Log(EDebugColors::Magenta, "Starting Cherry Engine ", ":)");
     return 0;
 }
+

@@ -31,6 +31,8 @@
 
 namespace DebugOnly
 {
+namespace
+{
 #ifdef DEBUG_MODE
 #ifdef _WIN32
 /**
@@ -168,6 +170,7 @@ std::string Ansi_To_Tuple(const EDebugColors color) noexcept
             break;
     }
 }
+} /* empty namespace */
 #endif /* DEBUG_MODE */
 } /* namespace DebugOnly */
 
