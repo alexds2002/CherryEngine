@@ -1,0 +1,43 @@
+/*************** General *****************/
+1. The code should as simple as possible.
+The only exception is a plugin or component that would never or rarely be touched like the debug_logger_component.h
+2. Everything that does not need to live on the heap should live on the stack.
+/*************** General *****************/
+
+/*************** Global ****************/
+1. Free Functions
+Upper Snake Cased.
+Example: Debug_Log()
+
+2. Global variables
+Start with g(avoid if possible).
+Example: gNumberOfThreads
+
+3 Global objects
+Start with upper G.
+Example: GEngine
+/*************** Global ****************/
+
+/*************** Defines ***************/
+1. Macros
+All upper case
+Example: ALL_UPPER_CASE
+/*************** Defines ***************/
+
+/*************** Classes ***************/
+1. Member variables
+Prefixed with "m_"
+Use snake case
+Be as short and as descriptive as possible
+Not inlcude its type in the name except for bool(bool m_bUseFlashlight is OK, array<int> m_arrayThreads is not OK)
+
+2. Member functions
+class ThreadPool
+{
+public:
+    void Start_Thread()
+
+private:
+    int m_num_of_threads{69};
+};
+/*************** Classes ***************/
