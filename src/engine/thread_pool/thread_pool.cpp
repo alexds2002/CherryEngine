@@ -1,12 +1,43 @@
 #include "thread_pool.h"
 #include <debug_logger_component.h>
 
-ThreadPool::ThreadPool() : m_threads_count{std::thread::hardware_concurrency()}
+ThreadPool::ThreadPool(uint32_t _number_of_threads) noexcept : m_threads_count(_number_of_threads),
+                                                               m_force_stop(false)
 {
-    /* if hardware_concurrency fails it returns 0 */
-    if(std::thread::hardware_concurrency() == 0)
+    /* if hardware_concurrency fails it returns 0 or if an invalid value is passed */
+    if(_number_of_threads == 0) { m_threads_count = 1; }
+    for(size_t i = 0; i < m_threads_count; ++i)
     {
-        m_threads_count = 1;
+        m_workers.empace_back([this]{
+                    while(true)
+                    {
+                        std::function<void()> task;
+                        {
+                            /* lock critical code */
+                            std::unique_lock<std::mutex> lock(this->m_mutex);
+                            m_condition_var.wait(lock,
+                                    [this]
+                                    {
+                                        return this->m_force_stop || !this->m_tasks.empty();
+                                    }
+                            if(this->m_force_stop || this->m_tasks.empty())
+                            {
+                                return;
+                            }
+                            task = std::move(this->m_tasks.front());
+                            this->m_tasks.pop();
+                        }
+                        task();
+                    }});
+    }
+}
+ThreadPool::~ThreadPool()
+{
+    m_force_stop = true;
+    m_condition_var.notify_all();
+    for(auto& thread : m_thread_pool)
+    {
+        thread.join();
     }
 }
 
