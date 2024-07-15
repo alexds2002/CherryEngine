@@ -1,32 +1,41 @@
 #pragma once
 
 #include <condition_variable>
+#include <type_traits>
 #include <functional>
+#include <cstdint>
+#include <future>
 #include <thread>
 #include <vector>
 #include <queue>
 #include <mutex>
-#include <cstdint>
 
 class ThreadPool
 {
 public:
-    explicit ThreadPool(uint32_t _number_of_threads) noexcept;
+    ThreadPool(uint32_t _number_of_threads) noexcept;
     ~ThreadPool();
+
     /**
      * @brief Adds a task to the task queue
      *
-     * @param  F&&: taks to be executed
+     * @param  Callable&&: taks to be executed
+     * @param  Args&&: arguments of the Callable
      *
      * Example usage:
      *
      * @return void
      */
-    template<typename Callable>
-    void Add_Task(Callable&& func) noexcept;
+    template<typename Callable, typename... Args>
+    auto Add_Task(Callable&& func, Args... args) -> std::future<typename std::result_of<Callable(Args...)>::type>;
 
+    /* Get the max number of worker threads on this system
+     * (possibly std::thread::hardware_concurrency */
     uint32_t Get_Number_Of_Threads() const noexcept;
+    /* Number of threads that are currently working */
     uint32_t Busy_Threads() const noexcept;
+    /* Get the number of tasks on the queue */
+    std::size_t Number_Of_Tasks() const noexcept;
 
 private:
     /* lock shared data */
@@ -45,3 +54,7 @@ private:
     /* if there is a force quit you can still finish your current execution */
     bool m_force_stop{false};
 };
+
+/* contains the function definitions */
+#include "thread_pool.hpp"
+
