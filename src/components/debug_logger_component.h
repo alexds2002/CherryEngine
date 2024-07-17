@@ -19,11 +19,13 @@
 #include <debug_mode_definitions.h>
 
 #ifdef DEBUG_MODE
+
 #include <iostream>
 #include <chrono>
 #include <ctime>
 
 #define UNIX_COLOR_END_TAG "\033[m"
+
 #endif /* DEBUG_MODE */
 
 namespace DebugOnly
