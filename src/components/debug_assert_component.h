@@ -24,14 +24,14 @@
     if(!(condition)) \
 {            \
     std::cerr << "CHERRY_ASSERT: Assert failed" << std::endl; \
-    std::abort();\
+    std::exit(1);\
 }
 #define CHERRY_ASSERT_2(condition, message) \
     if(!(condition)) \
 {            \
     std::cerr << "CHERRY_ASSERT: Assert failed" << std::endl; \
     std::cerr << message << std::endl;\
-    std::abort();\
+    std::exit(1);\
 }
 /* Macro to select the correct implementation */
 #define CHERRY_ASSERT_IMPL_REDIRECT(count) CHERRY_ASSERT_##count

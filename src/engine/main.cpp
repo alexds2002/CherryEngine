@@ -1,5 +1,6 @@
 #include <debug_logger_component.h>
 #include <debug_mode_definitions.h>
+#include <debug_assert_component.h>
 #include <benchmark_component.h>
 #include "thread_pool/thread_pool.h"
 
@@ -16,6 +17,7 @@ void TestFunction()
 
 int main(int argc, char* argv[])
 {
+    CHERRY_ASSERT(1 == 2, "HELLO");
     for(int i = 1; i < 17; ++i)
     {
         BenchMark ut;
