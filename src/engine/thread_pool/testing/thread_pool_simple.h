@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+ * A simple not very flexable yet performent implementation of a thread pool.
+ * TODO(Alex): To be further tested...
+ */
+
 #include <condition_variable>
 #include <vector>
 #include <mutex>
@@ -7,6 +12,9 @@
 #include <queue>
 #include <functional>
 #include <cinttypes>
+
+namespace CherryTest
+{
 
 class ThreadPoolSimple
 {
@@ -79,3 +87,5 @@ inline void ThreadPoolSimple::Add_Task(std::function<void()>&& func)
     }
     m_condition_var.notify_one();
 }
+
+} /* namespace CherryTest */

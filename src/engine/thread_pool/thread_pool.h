@@ -1,5 +1,31 @@
 #pragma once
 
+/*
+ * thread_pool is class for running any tasks you want concurrently by starting number of threads
+ * based on std::thread::hardware_concurrency. The thread_pool class supports result retrivial via
+ * std::future, it also supports variadic number of arguments to be passed to the task.
+ * By default the thread_pool starts with 2 threads if less are passed.
+ *
+ * BENCHMARK:
+ * This implementation is between 15-25% slower in adding a new task then the simple version
+ * without support for passing args or result retrivial.
+ * The execution of the tasks is the same.
+ *
+ * On avarage 4700ms to create 1000 threads with 1000 tasks each
+ * 1'000'000 tasks in total
+ *
+ * The simple implementation also doesnt need to be templated,
+ * which obviously decreases compilation time.
+ *
+ * !!! WARNINGS !!!
+ * The thread pool is thread safe by itself but the data
+ * and functionality inside the tasks is NOT thread safe.
+ * It is up to the user to avoid race conditions, deadlocks
+ * and maintain synchronization in their implementations.
+ * CONTRIBUTORS
+ * Stefan Rachkov
+ */
+
 #include <condition_variable>
 #include <type_traits>
 #include <functional>
@@ -13,7 +39,10 @@
 class ThreadPool
 {
 public:
+    /* creates and starts the threads */
     ThreadPool(uint32_t _number_of_threads) noexcept;
+
+    /* joins all the threads, force stops and notifyes all the threads */
     ~ThreadPool();
 
     /**
@@ -29,12 +58,26 @@ public:
     template<typename Callable, typename... Args>
     auto Add_Task(Callable&& func, Args... args) -> std::future<typename std::result_of<Callable(Args...)>::type>;
 
-    /* Get the max number of worker threads on this system
-     * (possibly std::thread::hardware_concurrency */
+    /*
+     * @brief Get the max number of worker threads for this system
+     * possably based on std::thread::hardware_concurrency
+     *
+     * @return void
+     */
     uint32_t Get_Number_Of_Threads() const noexcept;
-    /* Number of threads that are currently working */
+
+    /*
+     * @brief Get number of threads currently working
+     *
+     * @return uint32_t: count
+     */
     uint32_t Busy_Threads() const noexcept;
-    /* Get the number of tasks on the queue */
+
+    /*
+     * @brief Get number of tasks on the queue
+     *
+     * @return uint32_t: count
+     */
     std::size_t Number_Of_Tasks() const noexcept;
 
 private:
