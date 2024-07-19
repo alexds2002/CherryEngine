@@ -16,7 +16,8 @@
  *
  */
 
-#include <debug_mode_definitions.h>
+/* needed outside DEBUG_MODE to compile in other modes */
+#include <project_definitions.h>
 
 #ifdef DEBUG_MODE
 
@@ -24,85 +25,7 @@
 #include <chrono>
 #include <ctime>
 
-#define UNIX_COLOR_END_TAG "\033[m"
-
 #endif /* DEBUG_MODE */
-
-namespace DebugOnly
-{
-namespace
-{
-#ifdef DEBUG_MODE
-
-/**
- * @brief Convert color to its coresponding ANSI code
- *
- * Color converter for Unix systems, compiled when DEBUG_MODE is defined(RELEASE_MODE optimization)
- *
- * @param color: enum color to be converted
- *
- * @return std::string: corresponding ANSI code
- */
-std::string Ansi_To_Tuple(const EDebugColors color) noexcept
-{
-    switch (color)
-    {
-        case EDebugColors::Red:
-            return "\033[1;31m";
-            break;
-        case EDebugColors::Green:
-            return "\033[1;32m";
-            break;
-        case EDebugColors::Blue:
-            return "\033[1;34m";
-            break;
-        case EDebugColors::White:
-            return "\033[1;37m";
-            break;
-        case EDebugColors::Black:
-            return "\033[1;30m";
-            break;
-        case EDebugColors::Magenta:
-            return "\033[1;35m";
-            break;
-        case EDebugColors::Cyan:
-            return "\033[1;36m";
-            break;
-        case EDebugColors::Yellow:
-            return "\033[1;33m";
-            break;
-        case EDebugColors::Gray:
-            return "\033[1;90m";
-            break;
-        case EDebugColors::LightRed:
-            return "\033[1;91m";
-            break;
-        case EDebugColors::LightGreen:
-            return "\033[1;92m";
-            break;
-        case EDebugColors::LightBlue:
-            return "\033[1;94m";
-            break;
-        case EDebugColors::LightWhite:
-            return "\033[1;97m";
-            break;
-        case EDebugColors::LightMagenta:
-            return "\033[1;95m";
-            break;
-        case EDebugColors::LightCyan:
-            return "\033[1;96m";
-            break;
-        case EDebugColors::LightYellow:
-            return "\033[1;94m";
-            break;
-        default:
-            return "\033[1;37m"; // return White by default
-            break;
-    }
-}
-} /* empty namespace */
-#endif /* DEBUG_MODE */
-} /* namespace DebugOnly */
 
 /**
  * @brief Print on console dynamic number of args
@@ -137,15 +60,15 @@ inline void Debug_Log(Args&&... args) noexcept
  * @param ...args: dinamic number of arguments to print regardles of their type
  *
  * Example usage:
- * Debug_Log(EDebugColors::Red, "Loading next level", 69, 420.69);
+ * Debug_Log(EPrintColor::Red, "Loading next level", 69, 420.69);
  *
  * @return void
  */
 template<class... Args>
-inline void Debug_Log(const EDebugColors color, Args&&... args) noexcept
+inline void Debug_Log(const EPrintColor color, Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
-    std::string color_code = DebugOnly::Ansi_To_Tuple(color);
+    std::string color_code = Color_To_Ansi(color);
     std::cout << ">>> " << color_code;
     ([&]
     {
@@ -165,12 +88,12 @@ inline void Debug_Log(const EDebugColors color, Args&&... args) noexcept
  * @param ...args: dinamic number of arguments to print regardles of their type
  *
  * Example usage:
- * Debug_Log(EDebugColors::Red, true, "Loading next level", 69, 420.69);
+ * Debug_Log(EPrintColor::Red, true, "Loading next level", 69, 420.69);
  *
  * @return void
  */
 template<class... Args>
-inline void Debug_Log(const EDebugColors color, const bool bShowTime, Args&&... args) noexcept
+inline void Debug_Log(const EPrintColor color, const bool bShowTime, Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
     if(bShowTime)
@@ -179,7 +102,7 @@ inline void Debug_Log(const EDebugColors color, const bool bShowTime, Args&&... 
         auto time_struct = std::chrono::system_clock::to_time_t(call_time);
         std::cout << std::ctime(&time_struct);
     }
-    std::string color_code = DebugOnly::Ansi_To_Tuple(color);
+    std::string color_code = Color_To_Ansi(color);
     std::cout << ">>> " << color_code;
     ([&]
     {

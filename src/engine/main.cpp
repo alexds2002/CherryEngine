@@ -1,19 +1,8 @@
 #include <debug_logger_component.h>
 #include <debug_mode_definitions.h>
 #include <debug_assert_component.h>
+#include <release_logger_component.h>
 #include <benchmark_component.h>
-#include "thread_pool/thread_pool.h"
-
-void TestFunction()
-{
-    int a = 0;
-    int i = 0;
-    for(i = 0; i < 100'000; ++i)
-    {
-        a += i;
-    }
-    a = i;
-}
 
 struct Test
 {
@@ -41,6 +30,7 @@ int main(int argc, char* argv[])
     printStackPointer();
     dummpy();
     printStackPointer();
+    Debug_Log(EPrintColor::Magenta, "Starting Cherry Engine...");
     return EXIT_SUCCESS;
 }
 
