@@ -2,7 +2,6 @@
 
 #include "thread_pool.h"
 #include <memory>
-#include <iostream>
 
 inline ThreadPool::ThreadPool(uint32_t _number_of_threads) noexcept : m_threads_count(_number_of_threads),
                                                                m_force_stop(false)

@@ -15,6 +15,17 @@ void TestFunction()
     a = i;
 }
 
+struct Test
+{
+    int64_t test;
+};
+
+void dummpy()
+{
+    int64_t test11;
+    printStackPointer();
+}
+
 int main(int argc, char* argv[])
 {
     CHERRY_ASSERT(1 == 2, "HELLO");
@@ -27,6 +38,9 @@ int main(int argc, char* argv[])
             thread_pool.Add_Task(TestFunction);
         }
     }
+    printStackPointer();
+    dummpy();
+    printStackPointer();
     return EXIT_SUCCESS;
 }
 
