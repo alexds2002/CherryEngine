@@ -4,10 +4,10 @@
 #include <debug_logger_component.h>
 #include <stack>
 
-class MemoryTracker
+class StackMemoryTracker
 {
 public:
-    MemoryTracker();
+    StackMemoryTracker();
     void Print_Current_Stack_Size() const;
     void Add_Track_Point();
     void Print_Memory_From_Last_Point() const;
@@ -20,7 +20,7 @@ private:
 #endif /* DEBUG_MODE */
 };
 
-inline MemoryTracker::MemoryTracker()
+inline StackMemoryTracker::StackMemoryTracker()
 {
 #ifdef DEBUG_MODE
     void* stack_ptr;
@@ -29,7 +29,7 @@ inline MemoryTracker::MemoryTracker()
 #endif /* DEBUG_MODE */
 }
 
-inline void MemoryTracker::Print_Current_Stack_Size() const
+inline void StackMemoryTracker::Print_Current_Stack_Size() const
 {
 #ifdef DEBUG_MODE
     void* stack_ptr;
@@ -38,7 +38,7 @@ inline void MemoryTracker::Print_Current_Stack_Size() const
 #endif /* DEBUG_MODE */
 }
 
-inline void MemoryTracker::Add_Track_Point()
+inline void StackMemoryTracker::Add_Track_Point()
 {
 #ifdef DEBUG_MODE
     void* stack_ptr;
@@ -47,7 +47,7 @@ inline void MemoryTracker::Add_Track_Point()
 #endif /* DEBUG_MODE */
 }
 
-inline void MemoryTracker::Print_Memory_From_Last_Point() const
+inline void StackMemoryTracker::Print_Memory_From_Last_Point() const
 {
 #ifdef DEBUG_MODE
     void* stack_ptr;
@@ -56,7 +56,7 @@ inline void MemoryTracker::Print_Memory_From_Last_Point() const
 #endif /* DEBUG_MODE */
 }
 
-inline void MemoryTracker::Pop_Last_Point()
+inline void StackMemoryTracker::Pop_Last_Point()
 {
 #ifdef DEBUG_MODE
     void* stack_ptr;
