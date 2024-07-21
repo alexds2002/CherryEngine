@@ -9,6 +9,7 @@ class StackMemoryTracker
 public:
     StackMemoryTracker();
     void Print_Current_Stack_Size() const;
+    int Get_Current_Stack_Size() const;
     void Add_Track_Point();
     void Print_Memory_From_Last_Point() const;
     void Pop_Last_Point();
@@ -29,7 +30,16 @@ inline StackMemoryTracker::StackMemoryTracker()
 #endif /* DEBUG_MODE */
 }
 
-inline void StackMemoryTracker::Print_Current_Stack_Size() const
+inline int StackMemoryTracker::Get_Current_Stack_Size() const
+{
+#ifdef DEBUG_MODE
+    void* stack_ptr;
+    asm ("mov %%rsp, %0" : "=r"(stack_ptr));
+    return static_cast<char*>(stack_ptr) - static_cast<char*>(m_memory_begin);
+#endif /* DEBUG_MODE */
+}
+
+void StackMemoryTracker::Print_Current_Stack_Size() const
 {
 #ifdef DEBUG_MODE
     void* stack_ptr;
@@ -65,3 +75,4 @@ inline void StackMemoryTracker::Pop_Last_Point()
     m_memory_points.pop();
 #endif /* DEBUG_MODE */
 }
+

@@ -13,8 +13,8 @@
 std::atomic<size_t> total_allocated_memory(0); \
  \
 void* operator new(size_t size) { \
-    size_t totalSize = size + sizeof(size_t); \
-    void* ptr = std::malloc(totalSize); \
+    size_t total_size = size + sizeof(size_t); \
+    void* ptr = std::malloc(total_size); \
     if (!ptr) { \
         throw std::bad_alloc(); \
     } \
@@ -24,8 +24,8 @@ void* operator new(size_t size) { \
 } \
  \
 void* operator new[](size_t size) { \
-    size_t totalSize = size + sizeof(size_t); \
-    void* ptr = std::malloc(totalSize); \
+    size_t total_size = size + sizeof(size_t); \
+    void* ptr = std::malloc(total_size); \
     if (!ptr) { \
         throw std::bad_alloc(); \
     } \
@@ -35,18 +35,18 @@ void* operator new[](size_t size) { \
 } \
 void operator delete(void* ptr) noexcept { \
     if (ptr) { \
-        void* originalPtr = static_cast<char*>(ptr) - sizeof(size_t); \
-        size_t size = *static_cast<size_t*>(originalPtr); \
+        void* original_ptr = static_cast<char*>(ptr) - sizeof(size_t); \
+        size_t size = *static_cast<size_t*>(original_ptr); \
         total_allocated_memory -= size; \
-        std::free(originalPtr); \
+        std::free(original_ptr); \
     } \
 } \
 void operator delete[](void* ptr) noexcept { \
     if (ptr) { \
-        void* originalPtr = static_cast<char*>(ptr) - sizeof(size_t); \
-        size_t size = *static_cast<size_t*>(originalPtr); \
+        void* original_ptr = static_cast<char*>(ptr) - sizeof(size_t); \
+        size_t size = *static_cast<size_t*>(original_ptr); \
         total_allocated_memory -= size; \
-        std::free(originalPtr); \
+        std::free(original_ptr); \
     } \
 } \
 void operator delete(void* ptr, size_t size) noexcept { \
@@ -63,24 +63,24 @@ void operator delete[](void* ptr, size_t size) noexcept { \
     } \
 } \
  \
-size_t getTotalAllocatedMemory() { \
+size_t Get_Total_Allocated_Memory() { \
     return total_allocated_memory.load(); \
 } \
  \
-void reportTotalAllocatedMemory() { \
-    std::cout << "Total allocated memory: " << getTotalAllocatedMemory() << " bytes" << std::endl; \
+void Report_Total_Allocated_Memory() { \
+    std::cout << "Total allocated memory: " << Get_Total_Allocated_Memory() << " bytes" << std::endl; \
 } \
  \
 struct MemoryReporter { \
     ~MemoryReporter() { \
-        reportTotalAllocatedMemory(); \
+        Report_Total_Allocated_Memory(); \
     } \
 }; \
  \
 static MemoryReporter memoryReporter;
 // TRACK_MEMORY_ONLY() END
 
-#define TRACK_MEMORY_AND_LEAKS()\
+#define TRACK_LEAKS_AND_MEMORY()\
  \
 constexpr size_t MAX_TRACKED_ALLOCATIONS = 107374182; \
  \
@@ -89,27 +89,27 @@ struct AllocationRecord { \
     size_t size; \
 }; \
  \
-std::mutex heapTrackerMutex; \
-AllocationRecord allocationRecords[MAX_TRACKED_ALLOCATIONS]; \
-size_t allocationCount = 0; \
-size_t totalAllocatedMemory = 0; \
+std::mutex heap_tracker_mutex; \
+AllocationRecord allocation_records[MAX_TRACKED_ALLOCATIONS]; \
+size_t allocation_count = 0; \
+size_t total_allocated_memory = 0; \
  \
-void addAllocation(void* ptr, size_t size) { \
-    std::lock_guard<std::mutex> guard(heapTrackerMutex); \
-    if (allocationCount < MAX_TRACKED_ALLOCATIONS) { \
-        allocationRecords[allocationCount++] = { ptr, size }; \
-        totalAllocatedMemory += size; \
+void Add_Allocation(void* ptr, size_t size) { \
+    std::lock_guard<std::mutex> guard(heap_tracker_mutex); \
+    if (allocation_count < MAX_TRACKED_ALLOCATIONS) { \
+        allocation_records[allocation_count++] = { ptr, size }; \
+        total_allocated_memory += size; \
     } else { \
         std::cerr << "Warning: Maximum tracked allocations reached." << std::endl; \
     } \
 } \
  \
-void removeAllocation(void* ptr) { \
-    std::lock_guard<std::mutex> guard(heapTrackerMutex); \
-    for (size_t i = 0; i < allocationCount; ++i) { \
-        if (allocationRecords[i].ptr == ptr) { \
-            totalAllocatedMemory -= allocationRecords[i].size; \
-            allocationRecords[i] = allocationRecords[--allocationCount]; \
+void Remove_Allocation(void* ptr) { \
+    std::lock_guard<std::mutex> guard(heap_tracker_mutex); \
+    for (size_t i = 0; i < allocation_count; ++i) { \
+        if (allocation_records[i].ptr == ptr) { \
+            total_allocated_memory -= allocation_records[i].size; \
+            allocation_records[i] = allocation_records[--allocation_count]; \
             return; \
         } \
     } \
@@ -120,13 +120,13 @@ void* operator new(size_t size) { \
     if (!ptr) { \
         throw std::bad_alloc(); \
     } \
-    addAllocation(ptr, size); \
+    Add_Allocation(ptr, size); \
     return ptr; \
 } \
  \
 void operator delete(void* ptr) noexcept { \
     if (ptr) { \
-        removeAllocation(ptr); \
+        Remove_Allocation(ptr); \
         std::free(ptr); \
     } \
 } \
@@ -136,34 +136,37 @@ void* operator new[](size_t size) { \
     if (!ptr) { \
         throw std::bad_alloc(); \
     } \
-    addAllocation(ptr, size); \
+    Add_Allocation(ptr, size); \
     return ptr; \
 } \
  \
 void operator delete[](void* ptr) noexcept { \
     if (ptr) { \
-        removeAllocation(ptr); \
+        Remove_Allocation(ptr); \
         std::free(ptr); \
     } \
 } \
  \
-void reportLeaks() { \
-    std::lock_guard<std::mutex> guard(heapTrackerMutex); \
-    if (allocationCount == 0) { \
+void Report_Leaks() { \
+    std::lock_guard<std::mutex> guard(heap_tracker_mutex); \
+    if (allocation_count == 0) { \
         std::cout << "No memory leaks detected." << std::endl; \
     } else { \
         std::cout << "Memory leaks detected:" << std::endl; \
-        for (size_t i = 0; i < allocationCount; ++i) { \
-            std::cout << "Leaked " << allocationRecords[i].size << " bytes at address " << allocationRecords[i].ptr << std::endl; \
+        for (size_t i = 0; i < allocation_count; ++i) { \
+            std::cout << "Leaked " << allocation_records[i].size << " bytes at address " << allocation_records[i].ptr << std::endl; \
         } \
     } \
 } \
  \
 struct LeakReporter { \
     ~LeakReporter() { \
-        reportLeaks(); \
+        Report_Leaks(); \
     } \
 }; \
  \
 static LeakReporter leakReporter;
 // TRACK_MEMORY_AND_LEAKS() END
+
+#define PRINT_HEAP_MEMORY() \
+    std::cout << "Current Heap size: " << total_allocated_memory << "bytes" << std::endl;
