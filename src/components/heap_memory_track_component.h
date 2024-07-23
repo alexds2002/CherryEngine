@@ -1,14 +1,29 @@
 #pragma once
 
+/*
+ * The Heap memory tracker is a macro that overloads the new and delete operators,
+ * and tracks everything allocated on the heap. Every new call, STL container or smart ptr.
+ * This macro is only compiled in DEBUG_MODE to avoid overloading it in RELEASE_MODE.
+ * Example Usage:
+ * Above the main function:
+ * TRACK_HEAP_ONLY()
+ * Every time you want to check the heap size:
+ * PRINT_HEAP_MEMORY()
+ * !!! WARNING !!!
+ * The macro defines variables so calliing it multiple times in the same scope will crash the program.
+ */
+
+#ifdef DEBUG_MODE
 #include <iostream>
-#include <map>
 #include <cstdlib>
 #include <new>
 #include <mutex>
 #include <atomic>
 #include <cstdlib>
+#endif
 
-#define TRACK_MEMORY_ONLY() \
+#ifdef DEBUG_MODE
+#define TRACK_HEAP_ONLY() \
  \
 std::atomic<size_t> total_allocated_memory(0); \
  \
@@ -78,9 +93,13 @@ struct MemoryReporter { \
 }; \
  \
 static MemoryReporter memoryReporter;
-// TRACK_MEMORY_ONLY() END
+// TRACK_HEAP_ONLY() END
+#else
+#define TRACK_HEAP_ONLY() (void*)(0);
+#endif /* DEBUG_MODE */
 
-#define TRACK_LEAKS_AND_MEMORY()\
+#ifdef DEBUG_MODE
+#define TRACK_HEAP_AND_LEAKS()\
  \
 constexpr size_t MAX_TRACKED_ALLOCATIONS = 107374182; \
  \
@@ -124,13 +143,6 @@ void* operator new(size_t size) { \
     return ptr; \
 } \
  \
-void operator delete(void* ptr) noexcept { \
-    if (ptr) { \
-        Remove_Allocation(ptr); \
-        std::free(ptr); \
-    } \
-} \
- \
 void* operator new[](size_t size) { \
     void* ptr = std::malloc(size); \
     if (!ptr) { \
@@ -140,7 +152,27 @@ void* operator new[](size_t size) { \
     return ptr; \
 } \
  \
+void operator delete(void* ptr) noexcept { \
+    if (ptr) { \
+        Remove_Allocation(ptr); \
+        std::free(ptr); \
+    } \
+} \
+ \
 void operator delete[](void* ptr) noexcept { \
+    if (ptr) { \
+        Remove_Allocation(ptr); \
+        std::free(ptr); \
+    } \
+} \
+void operator delete(void* ptr, size_t size) noexcept { \
+    if (ptr) { \
+        Remove_Allocation(ptr); \
+        std::free(ptr); \
+    } \
+} \
+ \
+void operator delete[](void* ptr, size_t size) noexcept { \
     if (ptr) { \
         Remove_Allocation(ptr); \
         std::free(ptr); \
@@ -166,7 +198,14 @@ struct LeakReporter { \
 }; \
  \
 static LeakReporter leakReporter;
-// TRACK_MEMORY_AND_LEAKS() END
+// TRACK_HEAP_AND_LEAKS() END
+#else
+#define TRACK_HEAP_AND_LEAKS() (void*)(0);
+#endif /* DEBUG_MODE */
 
+#ifdef DEBUG_MODE
 #define PRINT_HEAP_MEMORY() \
     std::cout << "Current Heap size: " << total_allocated_memory << "bytes" << std::endl;
+#else
+#define PRINT_HEAP_MEMORY() (void*)(0);
+#endif /* DEBUG_MODE */
