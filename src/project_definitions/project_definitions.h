@@ -28,6 +28,25 @@ enum class EPrintColor : unsigned char
     LightYellow
 };
 
+/*
+ * Debug categories to filter Logs
+ */
+enum class ELogCategory : int
+{
+    Default,
+    Engine,
+    Component,
+    Threads,
+    AutoCount /* Should be last! Number of categories */
+};
+
+enum class ELogCategoryState : int
+{
+    Enabled,
+    Disabled,
+    AutoCount
+};
+
 /**
  * @brief Convert color to its coresponding ANSI code
  *

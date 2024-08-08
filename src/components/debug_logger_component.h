@@ -16,7 +16,7 @@
  *
  */
 
-/* needed outside DEBUG_MODE to compile in other modes */
+/* needed outside DEBUG_MODE to compile in other modes (EPrintColor)*/
 #include <project_definitions.h>
 
 #ifdef DEBUG_MODE
@@ -24,8 +24,41 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <map>
 
 #endif /* DEBUG_MODE */
+
+extern std::map<ELogCategory, ELogCategoryState> gLogCategoryStates;
+
+/* enable all categories on init */
+/* TODO(Alex): read them from json */
+inline void Init_Categories() noexcept
+{
+    for(int i = 0; i < static_cast<int>(ELogCategory::AutoCount); ++i)
+    {
+        gLogCategoryStates[static_cast<ELogCategory>(i)] = ELogCategoryState::Enabled;
+    }
+}
+
+inline void Disable_Category(const ELogCategory category) noexcept
+{
+    gLogCategoryStates[category] = ELogCategoryState::Disabled;
+}
+
+inline void Enable_Category(const ELogCategory category) noexcept
+{
+    gLogCategoryStates[category] = ELogCategoryState::Enabled;
+}
+
+inline bool Is_Category_Enabled(const ELogCategory category) noexcept
+{
+    return gLogCategoryStates[category] == ELogCategoryState::Enabled;
+}
+
+inline bool Is_Category_Disabled(const ELogCategory category) noexcept
+{
+    return gLogCategoryStates[category] == ELogCategoryState::Disabled;
+}
 
 /**
  * @brief Print on console dynamic number of args
@@ -42,6 +75,42 @@ template<class... Args>
 inline void Debug_Log(Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
+    /* Do not print if the default category is disabled */
+    if(gLogCategoryStates[ELogCategory::Default] != ELogCategoryState::Enabled)
+    {
+        return;
+    }
+    std::cout << ">>> ";
+    ([&]
+    {
+        std::cout << args;
+    } (), ...);
+    std::cout << std::endl;
+#endif /* DEBUG_MODE */
+}
+
+/**
+ * @brief Print on console dynamic number of args with a print category
+ *
+ * The body of the function is only compiled in DEBUG_MODE(RELEASE_MODE optimization)
+ *
+ * @param  category: print category
+ * @param ...args: dinamic number of arguments to print regardless of their type
+ *
+ * Example usage:
+ * Debug_Log("Loading next level", 69, 420.69);
+ *
+ * @return void
+ */
+template<class... Args>
+inline void Debug_Log(ELogCategory category, Args&&... args) noexcept
+{
+#ifdef DEBUG_MODE
+    /* Do not print disabled categories */
+    if(gLogCategoryStates[category] != ELogCategoryState::Enabled)
+    {
+        return;
+    }
     std::cout << ">>> ";
     ([&]
     {
@@ -79,6 +148,39 @@ inline void Debug_Log(const EPrintColor color, Args&&... args) noexcept
 }
 
 /**
+ * @brief Print on console dynamic number of args with color and a category
+ *
+ * The body of the function is only compiled in DEBUG_MODE(RELEASE_MODE optimization)
+ *
+ * @param  category: category to print in
+ * @param  color: print color
+ * @param ...args: dinamic number of arguments to print regardles of their type
+ *
+ * Example usage:
+ * Debug_Log(EPrintColor::Red, "Loading next level", 69, 420.69);
+ *
+ * @return void
+ */
+template<class... Args>
+inline void Debug_Log(const ELogCategory category, const EPrintColor color, Args&&... args) noexcept
+{
+#ifdef DEBUG_MODE
+    /* Do not print disabled categories */
+    if(gLogCategoryStates[category] != ELogCategoryState::Enabled)
+    {
+        return;
+    }
+    std::string color_code = Color_To_Ansi(color);
+    std::cout << ">>> " << color_code;
+    ([&]
+    {
+        std::cout << args;
+    } (), ...);
+    std::cout << UNIX_COLOR_END_TAG << std::endl;
+#endif /* DEBUG_MODE */
+}
+
+/**
  * @brief Print on console dynamic number of args with color and time option
  *
  * The body of the function is only compiled in DEBUG_MODE(RELEASE_MODE optimization)
@@ -96,6 +198,46 @@ template<class... Args>
 inline void Debug_Log(const EPrintColor color, const bool bShowTime, Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
+    if(bShowTime)
+    {
+        auto call_time = std::chrono::high_resolution_clock::now();
+        auto time_struct = std::chrono::system_clock::to_time_t(call_time);
+        std::cout << std::ctime(&time_struct);
+    }
+    std::string color_code = Color_To_Ansi(color);
+    std::cout << ">>> " << color_code;
+    ([&]
+    {
+        std::cout << args;
+    } (), ...);
+    std::cout << UNIX_COLOR_END_TAG << std::endl;
+#endif /* DEBUG_MODE */
+}
+
+/**
+ * @brief Print on console dynamic number of args with color, time and category option
+ *
+ * The body of the function is only compiled in DEBUG_MODE(RELEASE_MODE optimization)
+ *
+ * @param  category: print category
+ * @param  color: print color
+ * @param  bShowTime: show date and time of function call
+ * @param ...args: dinamic number of arguments to print regardles of their type
+ *
+ * Example usage:
+ * Debug_Log(EPrintColor::Red, true, "Loading next level", 69, 420.69);
+ *
+ * @return void
+ */
+template<class... Args>
+inline void Debug_Log(const ELogCategory category, const EPrintColor color, const bool bShowTime, Args&&... args) noexcept
+{
+#ifdef DEBUG_MODE
+    /* Do not print disabled categories */
+    if(gLogCategoryStates[category] != ELogCategoryState::Enabled)
+    {
+        return;
+    }
     if(bShowTime)
     {
         auto call_time = std::chrono::high_resolution_clock::now();
