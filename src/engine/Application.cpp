@@ -7,6 +7,10 @@
 #include <heap_memory_track_component.h>
 #include <stack_memory_track_component.h>
 #include <project_definitions.h>
+#include <string_algorithms.h>
+#include <array_algorithms.h>
+#include <linked_list_algorithms.h>
+#include "../data_structures/stack.hpp"
 
 bool Application::Init()
 {
@@ -14,5 +18,6 @@ bool Application::Init()
     Disable_Category(ELogCategory::Default);
     Enable_Category(ELogCategory::Default);
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Starting Cherry Engine...");
+
     return true; /* success */
 }

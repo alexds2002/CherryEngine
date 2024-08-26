@@ -1,5 +1,6 @@
 #pragma once
 
+/* CRTP */
 template <typename T>
 class Singleton
 {
