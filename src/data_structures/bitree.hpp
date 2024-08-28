@@ -1,3 +1,7 @@
+#pragma once
+
+namespace atl
+{
 template <typename T>
 struct BynaryTree
 {
@@ -7,4 +11,4 @@ struct BynaryTree
     BynaryTree<T>* left{nullptr};
     BynaryTree<T>* right{nullptr};
 };
-
+}

@@ -1,6 +1,9 @@
 #pragma once
+
 #include "../data_structures/linkedList.hpp"
 #include <unordered_set>
+#include <queue>
+#include <vector>
 
 namespace CherryMath
 {
@@ -91,6 +94,33 @@ inline atl::Node<T>* first_circular_node(atl::List<T> _list)
         fast = fast->next;
     }
     return fast;
+}
+
+template <typename T>
+inline atl::List<T>* merge_sorted_lists(const std::vector<atl::Node<T>*>& lists)
+{
+    atl::List<T> result_list = new atl::List<T>(0);
+    auto compare_function = [](atl::Node<T>* a, atl::Node<T>* b){ return a->val > b->val; };
+
+    std::priority_queue<atl::Node<T>*, std::vector<atl::Node<T>*>, decltype(compare_function)> heap;
+
+    for(auto node : lists)
+    {
+        heap.push(node);
+    }
+
+    while(!heap.empty())
+    {
+        atl::Node<T>* min_node = heap.top();
+        heap.pop();
+        result_list.push_back(min_node->val);
+        if(auto node = min_node->next)
+        {
+            heap.push(node);
+        }
+    }
+
+    return result_list;
 }
 
 }

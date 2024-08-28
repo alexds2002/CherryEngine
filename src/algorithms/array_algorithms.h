@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <utility>
 #include <stdint.h>
@@ -86,7 +87,6 @@ inline int binary_search(std::vector<int> _input, int search)
 }
 
 // 5 3 1 4 9 6 9
-
 inline size_t longest_increasing_sequence(const std::vector<int>& _input)
 {
     std::vector<size_t> lengts(_input.size(), 1);
@@ -123,6 +123,36 @@ inline int64_t max_subarray(const std::vector<int>& _input)
         curr_sum = std::max(curr_sum, 0l);
     }
 
+    return result;
+}
+
+inline std::vector<int> k_most_frequent_nums(const std::vector<int>& _input, int k)
+{
+    std::vector<int> result{};
+    std::vector<std::vector<int>> histogram(_input.size(), std::vector<int>());
+    std::unordered_map<int, int> umap;
+    int counter{0};
+
+    for(int i = 0; i < _input.size(); ++i)
+    {
+        umap[_input[i]]++;
+    }
+    for(auto pr : umap)
+    {
+        histogram[pr.second].push_back(pr.first);
+    }
+    for(int i = histogram.size() - 1; i >= 0; --i)
+    {
+        if(histogram[i].size() != 0)
+        {
+            for(int j = 0; j < histogram[i].size(); ++j)
+            {
+                result.push_back(histogram[i][j]);
+                --k;
+                if(k == 0) return result;
+            }
+        }
+    }
     return result;
 }
 
