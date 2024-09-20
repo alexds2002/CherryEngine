@@ -7,7 +7,7 @@
  * TODO(Alex): Add this file in one big core.h file.
  *
  * !!! WARNING !!!
- * The macro works only with exprecions with valid operator!
+ * The macro works only with exprecions with valid (operator!)
  */
 
 #ifdef DEBUG_MODE

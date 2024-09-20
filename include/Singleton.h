@@ -15,10 +15,10 @@ public:
         if(!m_instance) m_instance = new T;
         return *m_instance;
     }
-    /* Destroys the singleton class instance. */
     /*
-        Be aware that all references to the single class instance will be
-        invalid after this method has been executed!
+     *  Destroys the singleton class instance.
+     *  Be aware that all references to the single class instance will be
+     *  invalid after this method has been executed!
     */
     static void DestroyInstance()
     {

@@ -155,5 +155,26 @@ inline std::vector<int> k_most_frequent_nums(const std::vector<int>& _input, int
     }
     return result;
 }
+// [3,4,5,6,1,2]
+// [2,3,4,5,6,1]
+// [3 4 1 2]
+inline int find_min_in_sorted_and_rotated_arr(std::vector<int> &nums)
+{
+    if(nums.size() == 0) return 0;
+    int left = 0;
+    int right = nums.size() - 1;
+    int middle = (left + right) / 2;
+    int candidate = nums[middle];
+    while(left < right)
+    {
+        middle = (left + right) / 2;
+        if(candidate > nums[middle])
+        {
+            candidate = nums[middle];
+            right = middle - 1;
+        }
+    }
+    return middle;
+}
 
 } /* namespace CherryMath */

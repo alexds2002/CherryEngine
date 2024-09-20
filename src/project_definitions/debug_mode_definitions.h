@@ -5,8 +5,6 @@
 
 #endif /* DEBUG_MODE */
 
-/* Add things that will be compiled in other modes here */
-
 /*
  * This header contains definitions needed for debugging
  * (only when DEBUG_MODE is defined from CMake)

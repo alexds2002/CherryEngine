@@ -22,7 +22,9 @@ template <class T>
 int unordered_map<T>::HashFunction(const std::string& key)
 {
     //std::hash(key)
+
     int i = 0;
+    // simple hasing
     for(int j = 0; j < key.length(); j++)
     {
         i += key[j];

@@ -24,11 +24,8 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
-#include <map>
 
 #endif /* DEBUG_MODE */
-
-extern std::map<ELogCategory, ELogCategoryState> gLogCategoryStates;
 
 /* enable all categories on init */
 /* TODO(Alex): read them from json */
@@ -40,6 +37,7 @@ inline void Init_Categories() noexcept
     }
 }
 
+/* log category feature functions */
 inline void Disable_Category(const ELogCategory category) noexcept
 {
     gLogCategoryStates[category] = ELogCategoryState::Disabled;

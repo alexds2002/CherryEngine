@@ -15,9 +15,14 @@
 bool Application::Init()
 {
     Init_Categories();
-    Disable_Category(ELogCategory::Default);
-    Enable_Category(ELogCategory::Default);
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Starting Cherry Engine...");
 
     return true; /* success */
+}
+
+void Application::Update(double deltaTime)
+{
+    while(true)
+    {
+    }
 }
