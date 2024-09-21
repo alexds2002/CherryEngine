@@ -120,7 +120,7 @@ inline int64_t max_subarray(const std::vector<int>& _input)
 
         result = std::max(result, curr_sum);
 
-        curr_sum = std::max(curr_sum, 0l);
+        curr_sum = std::max(curr_sum, static_cast<long long>(0));
     }
 
     return result;
