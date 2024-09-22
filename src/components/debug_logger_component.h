@@ -25,38 +25,9 @@
 #include <chrono>
 #include <ctime>
 
+#include "log_categories.h"
+
 #endif /* DEBUG_MODE */
-
-/* enable all categories on init */
-/* TODO(Alex): read them from json */
-inline void Init_Categories() noexcept
-{
-    for(int i = 0; i < static_cast<int>(ELogCategory::AutoCount); ++i)
-    {
-        gLogCategoryStates[static_cast<ELogCategory>(i)] = ELogCategoryState::Enabled;
-    }
-}
-
-/* log category feature functions */
-inline void Disable_Category(const ELogCategory category) noexcept
-{
-    gLogCategoryStates[category] = ELogCategoryState::Disabled;
-}
-
-inline void Enable_Category(const ELogCategory category) noexcept
-{
-    gLogCategoryStates[category] = ELogCategoryState::Enabled;
-}
-
-inline bool Is_Category_Enabled(const ELogCategory category) noexcept
-{
-    return gLogCategoryStates[category] == ELogCategoryState::Enabled;
-}
-
-inline bool Is_Category_Disabled(const ELogCategory category) noexcept
-{
-    return gLogCategoryStates[category] == ELogCategoryState::Disabled;
-}
 
 /**
  * @brief Print on console dynamic number of args
@@ -74,7 +45,8 @@ inline void Debug_Log(Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
     /* Do not print if the default category is disabled */
-    if(gLogCategoryStates[ELogCategory::Default] != ELogCategoryState::Enabled)
+    LogManager* logManager = LogManager::GetInstance();
+    if(logManager->IsCategoryDisabled(ELogCategory::Default))
     {
         return;
     }
@@ -105,7 +77,8 @@ inline void Debug_Log(ELogCategory category, Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
     /* Do not print disabled categories */
-    if(gLogCategoryStates[category] != ELogCategoryState::Enabled)
+    LogManager* logManager = LogManager::GetInstance();
+    if(logManager->IsCategoryDisabled(category))
     {
         return;
     }
@@ -135,6 +108,12 @@ template<class... Args>
 inline void Debug_Log(const EPrintColor color, Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
+    /* Do not print if default category is disabled */
+    LogManager* logManager = LogManager::GetInstance();
+    if(logManager->IsCategoryDisabled(ELogCategory::Default))
+    {
+        return;
+    }
     std::string color_code = Color_To_Ansi(color);
     std::cout << ">>> " << color_code;
     ([&]
@@ -164,7 +143,8 @@ inline void Debug_Log(const ELogCategory category, const EPrintColor color, Args
 {
 #ifdef DEBUG_MODE
     /* Do not print disabled categories */
-    if(gLogCategoryStates[category] != ELogCategoryState::Enabled)
+    LogManager* logManager = LogManager::GetInstance();
+    if(logManager->IsCategoryDisabled(category))
     {
         return;
     }
@@ -196,6 +176,11 @@ template<class... Args>
 inline void Debug_Log(const EPrintColor color, const bool bShowTime, Args&&... args) noexcept
 {
 #ifdef DEBUG_MODE
+    LogManager* logManager = LogManager::GetInstance();
+    if(logManager->IsCategoryDisabled(ELogCategory::Default))
+    {
+        return;
+    }
     if(bShowTime)
     {
         auto call_time = std::chrono::high_resolution_clock::now();
@@ -232,7 +217,8 @@ inline void Debug_Log(const ELogCategory category, const EPrintColor color, cons
 {
 #ifdef DEBUG_MODE
     /* Do not print disabled categories */
-    if(gLogCategoryStates[category] != ELogCategoryState::Enabled)
+    LogManager* logManager = LogManager::GetInstance();
+    if(logManager->IsCategoryDisabled(category))
     {
         return;
     }

@@ -10,11 +10,9 @@
 #include <string_algorithms.h>
 #include <array_algorithms.h>
 #include <linked_list_algorithms.h>
-#include "../data_structures/stack.hpp"
 
 bool Application::Init()
 {
-    Init_Categories();
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Starting Cherry Engine...");
 
     return true; /* success */
