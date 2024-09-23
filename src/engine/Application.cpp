@@ -11,9 +11,31 @@
 #include <array_algorithms.h>
 #include <linked_list_algorithms.h>
 
+#include <GLFW/glfw3.h>
+
 bool Application::Init()
 {
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Starting Cherry Engine...");
+    GLFWwindow* window;
+
+    /* Init GLFW */
+    if( !glfwInit() )
+       exit( EXIT_FAILURE );
+
+    window = glfwCreateWindow( 400, 400, "Boing (classic Amiga demo)", NULL, NULL );
+    if (!window)
+    {
+        glfwTerminate();
+        exit( EXIT_FAILURE );
+    }
+    while(!glfwWindowShouldClose(window))
+    {
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    exit( EXIT_SUCCESS );
 
     return true; /* success */
 }
