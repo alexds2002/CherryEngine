@@ -1,15 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-# TODO(Alex): Update to 23
-set(CMAKE_CXX_STANDARD 20)
 project(CherrY)
-
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-add_subdirectory(libs/glfw)
-
-find_package(OpenGL REQUIRED)
-find_package(Threads REQUIRED)
 
 # Build types are
 # Debug
@@ -19,6 +9,21 @@ if (NOT CMAKE_BUILD_TYPE STREQUAL "")
     string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     add_compile_definitions("${CMAKE_BUILD_TYPE}_MODE")
 endif()
+
+# TODO(Alex): Update to 23
+set(CMAKE_CXX_STANDARD 20)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+if (CMAKE_BUILD_TYPE STREQUAL "DEBUG_MODE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g -O0")
+elseif(CMAKE_BUILD_TYPE STREQUAL "RELEASE_MODE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif()
+
+add_subdirectory(libs/glfw)
+
+find_package(OpenGL REQUIRED)
+find_package(Threads REQUIRED)
 
 file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS core/*.cpp
                                                  core/*.hpp
