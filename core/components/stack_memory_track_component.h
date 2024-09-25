@@ -43,10 +43,12 @@ private:
 
 inline StackMemoryTracker::~StackMemoryTracker()
 {
+#ifdef DEBUG_MODE
     while(!m_memory_points.empty())
     {
         m_memory_points.pop();
     }
+#endif /* DEBUG_MODE */
 }
 
 inline StackMemoryTracker::StackMemoryTracker()

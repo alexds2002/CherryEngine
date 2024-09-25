@@ -20,17 +20,30 @@ if (NOT CMAKE_BUILD_TYPE STREQUAL "")
     add_compile_definitions("${CMAKE_BUILD_TYPE}_MODE")
 endif()
 
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp
-                                            src/*.h
-                                            src/*.hpp)
+file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS core/*.cpp
+                                                 core/*.hpp
+                                                 core/*.h)
 
-add_executable(${PROJECT_NAME} WIN32 ${SOURCES})
+file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS editor/*.cpp
+                                                   editor/*.hpp
+                                                   editor/*.h)
+
+# Tell cmake to build the sandbox
+if (BUILD_SANDBOX)
+    message("-- Sandbox build")
+    file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS sandbox/*.cpp
+                                                        sandbox/*.hpp
+                                                        sandbox/*.h)
+endif()
+
+add_executable(${PROJECT_NAME} ${CORE_SOURCES} ${EDITOR_SOURCES} ${SANDBOX_SOURCES})
 
 include_directories(${OPENGL_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/project_definitions)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/components)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/project_definitions)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/thread_pool)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/components)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/algorithms)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/glfw/include)
 
 # alternatively where to look for lib files

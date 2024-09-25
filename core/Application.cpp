@@ -7,9 +7,6 @@
 #include <heap_memory_track_component.h>
 #include <stack_memory_track_component.h>
 #include <project_definitions.h>
-#include <string_algorithms.h>
-#include <array_algorithms.h>
-#include <linked_list_algorithms.h>
 
 #include <GLFW/glfw3.h>
 
