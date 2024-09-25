@@ -1,6 +1,5 @@
 #include "Application.h"
 #include <heap_memory_track_component.h>
-#include "../sandbox/algorithms/string_algorithms.h"
 
 #ifdef DEBUG_MODE
 // TRACK_HEAP_AND_LEAKS() // start tracking heap
