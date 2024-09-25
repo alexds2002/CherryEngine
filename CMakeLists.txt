@@ -20,6 +20,9 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "RELEASE_MODE")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif()
 
+# Add the GLAD submodule
+#add_subdirectory(libs/glad/cmake)
+# Add the GLFW submodule
 add_subdirectory(libs/glfw)
 
 find_package(OpenGL REQUIRED)
@@ -41,8 +44,15 @@ if (BUILD_SANDBOX)
                                                         sandbox/*.h)
 endif()
 
-add_executable(${PROJECT_NAME} ${CORE_SOURCES} ${EDITOR_SOURCES} ${SANDBOX_SOURCES})
+# Add all sources and manually add the glad library
+add_executable(${PROJECT_NAME}
+               ${CORE_SOURCES}
+               ${EDITOR_SOURCES}
+               ${SANDBOX_SOURCES}
+               libs/glad/generated/src/gl.c)
 
+# Include the GLAD headers
+include_directories(${PROJECT_NAME} PRIVATE libs/glad/generated/include)
 include_directories(${OPENGL_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/project_definitions)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/thread_pool)
