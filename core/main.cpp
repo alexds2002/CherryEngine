@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "application.h"
 #include <heap_memory_track_component.h>
 
 #ifdef DEBUG_MODE
