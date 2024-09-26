@@ -13,6 +13,7 @@ int main(int argc, char* argv[])
     {
         std::cout << "Application count not Init!" << std::endl;
     }
+    App->Update();
     return EXIT_SUCCESS;
 }
 

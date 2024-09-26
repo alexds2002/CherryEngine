@@ -34,7 +34,9 @@ enum class EPrintColor : unsigned char
 enum class ELogCategory : int
 {
     Default,
-    Engine,
+    Error,
+    Core,
+    Editor,
     Component,
     Threads,
     AutoCount /* Should be last! Number of categories */
