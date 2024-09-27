@@ -4,6 +4,12 @@
 
 #define UNIX_COLOR_END_TAG "\033[m"
 
+struct Position
+{
+    float x;
+    float y;
+};
+
 /*
  * Supported Log Colors
  * Limited to 256 colors
