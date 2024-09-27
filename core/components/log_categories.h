@@ -2,6 +2,7 @@
 
 /*
  * TODO(Alex): Add API for runtine disabling/enabling of the categories. Maybe with IMGUI
+ * TODO(Alex): Add name support for each category(optionally show the category name)
  */
 
 #include <project_definitions.h>

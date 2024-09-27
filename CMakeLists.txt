@@ -44,7 +44,8 @@ if (BUILD_SANDBOX)
                                                         sandbox/*.h)
 endif()
 
-# Add all sources and manually add the glad library
+# Add all sources
+# Manually add the glad library
 add_executable(${PROJECT_NAME}
                ${CORE_SOURCES}
                ${EDITOR_SOURCES}

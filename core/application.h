@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Singleton.h>
+#include <memory>
 
 class Window;
 
@@ -12,6 +13,6 @@ public:
     bool Init();
     void Update(double deltaTime = 0);
 private:
-    Window* m_window;
+    std::unique_ptr<Window> m_window;
 };
 

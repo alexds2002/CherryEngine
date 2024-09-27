@@ -12,19 +12,21 @@ Application::Application()
 Application::~Application()
 {
     // Terminate GLFW, clearing any resources allocated by GLFW.
+    // TODO: if you have multiple application instances you might not want to do that(do i want that?)
     glfwTerminate();
-    delete m_window;
 }
 
 bool Application::Init()
 {
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Starting Cherry Engine...");
-    m_window = new Window();
+    m_window = std::make_unique<Window>();
     if(!m_window->Init())
     {
-        Debug_Log(ELogCategory::Error, EPrintColor::White, "Window cound not be initilzed!");
+        Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
     }
+
+    m_window->SetVSyncOn(); // vsync on by default
     return true; // success
 }
 
@@ -36,10 +38,11 @@ void Application::Update(double deltaTime)
         // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
 
-        // Render
+        // Renderer
+
         // Clear the colorbuffer
-        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         // Swap the screen buffers
         glfwSwapBuffers(m_window->GetGLFWwindow());
@@ -49,7 +52,7 @@ void Application::Update(double deltaTime)
 //TODO(Alex): Implement eventkey system
 
 // Set the required callback functions
-//glfwSetKeyCallback(window, key_callback);
+// glfwSetKeyCallback(window, key_callback);
 /* Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
