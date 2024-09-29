@@ -1,16 +1,74 @@
 #pragma once
 
-/*
- * The Heap memory tracker is a macro that overloads the new and delete operators,
- * and tracks everything allocated on the heap. Every new call, STL container or smart ptr.
- * This macro is only compiled in DEBUG_MODE to avoid overloading it in RELEASE_MODE.
- * Example Usage:
- * Above the main function:
- * TRACK_HEAP_ONLY()
- * Every time you want to check the heap size:
- * PRINT_HEAP_MEMORY()
- * !!! WARNING !!!
- * The macro defines variables so calliing it multiple times in the same scope will crash the program.
+/**
+ * @file heap_memory_tracker_component.h
+ * @brief Heap memory tracking and leak detection macros.
+ *
+ * This header provides macros to track heap memory allocations and detect memory leaks.
+ * It overloads the global `new` and `delete` operators to track all heap allocations
+ * and deallocations. These macros are only active in `DEBUG_MODE`.
+ *
+ * Usage:
+ * 1. To enable heap memory tracking:
+ *    - Place `TRACK_HEAP_ONLY()` above your `main()` function.
+ *    - Call `PRINT_HEAP_MEMORY()` to print the current heap size at any point.
+ *    - Use `TRACK_HEAP_AND_LEAKS()` to also track and report memory leaks.
+ *
+ * 2. In `RELEASE_MODE`, all these macros are disabled, and memory tracking does not occur.
+ *
+ * Example usage:
+ * @code
+ * TRACK_HEAP_ONLY();
+ * // Allocate some memory
+ * PRINT_HEAP_MEMORY(); // Print current heap memory usage
+ * @endcode
+ *
+ * @note Do not call the tracking macro multiple times in the same scope, as it defines static variables
+ * that may cause conflicts or crashes when defined more than once.
+ */
+
+/**
+ * @def TRACK_HEAP_ONLY()
+ * @brief Macro to track heap memory allocations without detecting leaks.
+ *
+ * This macro overloads the global `new` and `delete` operators to track the total heap memory allocated.
+ * It keeps a running total of all heap memory currently in use.
+ *
+ * In `DEBUG_MODE`, the macro initializes the `total_allocated_memory` counter and implements custom memory
+ * allocation and deallocation functions. The memory usage is updated with each allocation and deallocation.
+ *
+ * The macro defines a static `MemoryReporter` object that prints the total allocated memory when the program exits.
+ *
+ * @note Calling this macro multiple times in the same scope will result in a crash due to variable redefinitions.
+ */
+
+/**
+ * @def TRACK_HEAP_AND_LEAKS()
+ * @brief Macro to track heap memory allocations and detect memory leaks.
+ *
+ * This macro extends the functionality of `TRACK_HEAP_ONLY()` by additionally tracking
+ * individual allocations and reporting memory leaks at program termination.
+ *
+ * It stores all allocations in an array of `AllocationRecord` structures. On deallocation,
+ * the corresponding entry is removed. At the end of the program, the remaining entries
+ * (representing memory leaks) are printed.
+ *
+ * The macro defines a static `LeakReporter` object that reports leaks when the program exits.
+ *
+ * @note Like `TRACK_HEAP_ONLY()`, calling this macro multiple times in the same scope will cause a crash.
+ */
+
+/**
+ * @def PRINT_HEAP_MEMORY()
+ * @brief Macro to print the current heap memory usage.
+ *
+ * This macro prints the total amount of memory currently allocated on the heap.
+ * It uses the `total_allocated_memory` atomic counter defined by `TRACK_HEAP_ONLY()`.
+ *
+ * Example usage:
+ * @code
+ * PRINT_HEAP_MEMORY();
+ * @endcode
  */
 
 #ifdef DEBUG_MODE

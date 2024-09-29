@@ -1,52 +1,109 @@
 #pragma once
 
-/* CRTP */
+/**
+ * @file Singleton.h
+ * @brief A template class for implementing the Singleton design pattern.
+ *
+ * The `Singleton` class provides a simple way to create a singleton instance
+ * of a class using the Curiously Recurring Template Pattern (CRTP). It ensures that
+ * only one instance of the class exists and provides global access to that instance.
+ *
+ * Usage Example:
+ * @code
+ * class MySingleton : public Singleton<MySingleton>
+ * {
+ *     // Singleton-specific methods
+ * };
+ *
+ * void SomeFunction()
+ * {
+ *     MySingleton* instance = MySingleton::GetInstance();
+ * }
+ * @endcode
+ *
+ * @tparam T The type of the singleton class that inherits from `Singleton`.
+ */
 template <typename T>
 class Singleton
 {
 public:
+    /**
+     * @brief Retrieves the singleton instance.
+     *
+     * If the instance does not exist, it is created. This method returns a pointer
+     * to the singleton instance.
+     *
+     * @return T* A pointer to the singleton instance.
+     */
     static T* GetInstance()
     {
         if(!m_instance) m_instance = new T;
         return m_instance;
     }
+
+    /**
+     * @brief Retrieves the singleton instance by reference.
+     *
+     * If the instance does not exist, it is created. This method returns a reference
+     * to the singleton instance.
+     *
+     * @return T& A reference to the singleton instance.
+     */
     static T& GetRef()
     {
         if(!m_instance) m_instance = new T;
         return *m_instance;
     }
-    /*
-     *  Destroys the singleton class instance.
-     *  Be aware that all references to the single class instance will be
-     *  invalid after this method has been executed!
-    */
+
+    /**
+     * @brief Destroys the singleton instance.
+     *
+     * This method deletes the singleton instance and sets the instance pointer to null.
+     * All references to the singleton instance will be invalid after this method is called.
+     */
     static void DestroyInstance()
     {
         delete m_instance;
         m_instance = nullptr;
     }
 
-    /*
-       Prevent the class from being copied or moved.
+    /**
+     * @brief Prevents moving or copying the singleton instance.
+     *
+     * This ensures that the singleton instance cannot be copied or moved, preserving
+     * the unique instance guarantee.
      */
     Singleton(Singleton&& source) = delete;
     Singleton(const Singleton& source) = delete;
     Singleton& operator=(Singleton&& source) = delete;
     const Singleton& operator=(const Singleton& source) = delete;
+
 protected:
-    /*
-       Shield the constructor and destructor to prevent outside sources
-       from creating or destroying a CSingleton instance.
+    /**
+     * @brief Protected constructor for the Singleton class.
+     *
+     * This prevents external classes from creating instances of the singleton directly.
      */
     Singleton() = default;
+
+    /**
+     * @brief Protected destructor for the Singleton class.
+     *
+     * This cleans up the singleton instance when it is destroyed.
+     */
     ~Singleton()
     {
         delete m_instance;
         m_instance = nullptr;
     }
+
 private:
-    static T* m_instance;
+    /**
+     * @brief Static pointer to the singleton instance.
+     *
+     * This static member variable holds the instance of the singleton class.
+     * inlined so it can be class initialized
+     */
+    inline static T* m_instance{nullptr};
 };
 
-/* static class member initialisation */
-template <typename T> T* Singleton<T>::m_instance = nullptr;
