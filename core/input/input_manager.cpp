@@ -5,23 +5,71 @@
 #include <project_definitions.h>
 #include <debug_assert_component.h>
 
-// TODO(Alex): Add modifications support.
+/* TODO(Alex): Add modifications support. */
+
+/* The event handling functions must be non member functions (free functions) as required from glfw. */
+
+/**
+ * @brief Handles keyboard events from the GLFW window.
+ *
+ * This function is called by GLFW when a key event occurs (e.g., key pressed, released).
+ * It retrieves the key code and action and dispatches the corresponding event to
+ * the `InputManager`, which will handle the registered callbacks for that key.
+ *
+ * @param window A pointer to the GLFW window that received the event.
+ * @param key The key code of the key that was pressed or released.
+ * @param scancode The system-specific scancode of the key.
+ * @param action The action of the event (e.g., GLFW_PRESS, GLFW_RELEASE).
+ * @param mods Bitfield that indicates which modifier keys were held down
+ *             during the event (e.g., Shift, Ctrl).
+ *
+ * @note This function must be registered with GLFW using
+ *       `glfwSetKeyCallback()` to ensure it is called on key events.
+ */
 static void HandleKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     InputManager::GetInstance()->DispatchKeyEvent(static_cast<KeyCode>(key), static_cast<KeyState>(action));
 }
 
+/**
+ * @brief Handles mouse button events from the GLFW window.
+ *
+ * This function is called by GLFW when a mouse button event occurs (e.g., button pressed, released).
+ * It retrieves the mouse button code and action, then dispatches the corresponding event to
+ * the `InputManager`, which will handle the registered callbacks for that mouse button.
+ *
+ * @param window A pointer to the GLFW window that received the event.
+ * @param mouse_button The mouse button code of the button that was pressed or released.
+ * @param action The action of the event (e.g., GLFW_PRESS, GLFW_RELEASE).
+ * @param mods Bitfield that indicates which modifier keys were held down
+ *             during the event (e.g., Shift, Ctrl).
+ *
+ * @note This function must be registered with GLFW using
+ *       `glfwSetMouseButtonCallback()` to ensure it is called on mouse button events.
+ */
 static void HandleMouseEvent(GLFWwindow* window, int mouse_button, int action, int mods)
 {
     InputManager::GetInstance()->DispatchKeyEvent(static_cast<KeyCode>(mouse_button), static_cast<KeyState>(action));
 }
 
+/**
+ * @brief Handles mouse movement events from the GLFW window.
+ *
+ * This function is called by GLFW when the mouse is moved. Currently, it does not
+ * dispatch any events but can be expanded to handle mouse movement in the future.
+ *
+ * @param window A pointer to the GLFW window that received the event.
+ * @param xpos The new X-coordinate of the mouse cursor.
+ * @param ypos The new Y-coordinate of the mouse cursor.
+ *
+ * @note This function can be registered with GLFW using
+ *       `glfwSetCursorPosCallback()` if mouse movement needs to be tracked.
+ *       Currently, no actions are performed within this function.
+ */
 static void HandleMouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-}
-
-InputManager::InputManager()
-{
+    // Currently, no actions are performed within this function.
+    // TODO(Alex): update mouse position value here
 }
 
 void InputManager::Init(GLFWwindow* window)
@@ -111,18 +159,39 @@ void InputManager::BindAction(KeyCode key, KeyState state, std::function<void()>
     m_eventKeyCallbacks[key][state].push_back(callback);
 }
 
+/**
+ * @brief Retrieves the current mouse position as a Position object.
+ *
+ * This function returns the current position of the mouse cursor
+ * as a `Position` structure containing the X and Y coordinates.
+ *
+ * @return Position The current mouse position.
+ */
 Position InputManager::GetMousePosition()
 {
     return m_mousePosition;
 }
 
+/**
+ * @brief Retrieves the current X coordinate of the mouse cursor.
+ *
+ * This function returns the X coordinate of the current mouse cursor position.
+ *
+ * @return double The current X coordinate of the mouse.
+ */
 double InputManager::GetMouseX()
 {
     return m_mousePosition.x;
 }
 
+/**
+ * @brief Retrieves the current Y coordinate of the mouse cursor.
+ *
+ * This function returns the Y coordinate of the current mouse cursor position.
+ *
+ * @return double The current Y coordinate of the mouse.
+ */
 double InputManager::GetMouseY()
 {
     return m_mousePosition.y;
 }
-
