@@ -2,8 +2,10 @@
 #include "window.hpp"
 
 #include <debug_logger_component.h>
+#include <project_definitions.h>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <input_manager.h>
 
 Application::Application()
 {
@@ -12,19 +14,21 @@ Application::Application()
 Application::~Application()
 {
     // Terminate GLFW, clearing any resources allocated by GLFW.
-    // TODO: if you have multiple application instances you might not want to do that(do i want that?)
+    // TODO: if you have multiple application instances you might not want to do that?
     glfwTerminate();
 }
 
 bool Application::Init()
 {
-    Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Starting Cherry Engine...");
+    Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Loading Cherry Engine...");
     m_window = std::make_unique<Window>();
     if(!m_window->Init())
     {
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
     }
+
+    InputManager::GetInstance()->Init(m_window->GetGLFWwindow()); // Init after m_window is initialized!
 
     m_window->SetVSyncOn(); // vsync on by default
     return true; // success
@@ -35,8 +39,8 @@ void Application::Update(double deltaTime)
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
     {
-        // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
-        glfwPollEvents();
+        // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions.
+        InputManager::GetInstance()->PollEvents();
 
         // Renderer
 
@@ -49,13 +53,3 @@ void Application::Update(double deltaTime)
     }
 }
 
-//TODO(Alex): Implement eventkey system
-
-// Set the required callback functions
-// glfwSetKeyCallback(window, key_callback);
-/* Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-}*/
