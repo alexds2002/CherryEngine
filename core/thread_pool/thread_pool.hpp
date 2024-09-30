@@ -12,23 +12,23 @@
  * from the task queue until the pool is stopped.
  *
  * @param _number_of_threads The desired number of threads for the thread pool.
- *                           If the value is less than or equal to 1, the pool 
+ *                           If the value is less than or equal to 1, the pool
  *                           will use a single thread.
  *
  * @note
  * - The thread pool is initialized with a task loop in each thread that waits
- *   for tasks to be added. Each thread will continue to run until a forced stop 
+ *   for tasks to be added. Each thread will continue to run until a forced stop
  *   is triggered (`m_force_stop` is true) and all tasks in the queue are processed.
- * - The constructor ensures that the number of threads is set to at least 1 
+ * - The constructor ensures that the number of threads is set to at least 1
  *   (in case the user passes an invalid value like 0).
  *
  * @details
  * - The constructor creates worker threads and assigns them a task loop. Each
- *   thread waits for tasks to be added to the task queue using a condition 
+ *   thread waits for tasks to be added to the task queue using a condition
  *   variable (`m_condition_var`).
  * - When a task is available or a stop is requested, the thread wakes up. If a
  *   forced stop is triggered and the task queue is empty, the thread exits its loop.
- * - The task queue is thread-safe and is protected by a mutex (`m_mutex`) to 
+ * - The task queue is thread-safe and is protected by a mutex (`m_mutex`) to
  *   ensure safe access by multiple threads.
  *
  * Example usage:

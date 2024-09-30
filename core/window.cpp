@@ -5,6 +5,14 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
+/*
+ * Handles window resize event.
+ */
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
 Window::Window()
 {
 }
@@ -47,6 +55,9 @@ bool Window::Init(const std::string& windowName, int width, int height)
     }
     // Successfully loaded OpenGL
     Debug_Log("Loaded OpenGL ", GLAD_VERSION_MAJOR(version), ".", GLAD_VERSION_MINOR(version));
+
+    glViewport(0, 0, m_data.width, m_data.height);
+    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
     return true; // success
 }

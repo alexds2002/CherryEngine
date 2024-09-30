@@ -2,12 +2,8 @@
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include <project_definitions.h>
-#include <debug_assert_component.h>
 
 /* TODO(Alex): Add modifications support. */
-
-/* The event handling functions must be non member functions (free functions) as required from glfw. */
 
 /**
  * @brief Handles keyboard events from the GLFW window.
@@ -15,6 +11,7 @@
  * This function is called by GLFW when a key event occurs (e.g., key pressed, released).
  * It retrieves the key code and action and dispatches the corresponding event to
  * the `InputManager`, which will handle the registered callbacks for that key.
+ * The event handling functions must be non member functions (free functions) as required from glfw.
  *
  * @param window A pointer to the GLFW window that received the event.
  * @param key The key code of the key that was pressed or released.

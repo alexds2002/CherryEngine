@@ -42,7 +42,7 @@ void Application::Update(double deltaTime)
         // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions.
         InputManager::GetInstance()->PollEvents();
 
-        // Renderer
+        // Use Renderer
 
         // Clear the colorbuffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
