@@ -20,8 +20,8 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "RELEASE_MODE")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif()
 
-# Add the GLAD submodule
-#add_subdirectory(libs/glad/cmake)
+# Add GLM as a subdirectory
+add_subdirectory(libs/glm)
 # Add the GLFW submodule
 add_subdirectory(libs/glfw)
 
@@ -52,6 +52,8 @@ add_executable(${PROJECT_NAME}
                ${SANDBOX_SOURCES}
                libs/glad/generated/src/gl.c)
 
+# Tell CMake to include GLM headers
+include_directories(libs/glm)
 # Include the GLAD headers
 include_directories(${PROJECT_NAME} PRIVATE libs/glad/generated/include)
 include_directories(${OPENGL_INCLUDE_DIRS})
@@ -67,5 +69,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/li
 target_link_directories(${PROJECT_NAME} PRIVATE libs/glfw/src)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL glfw)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL glfw glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
