@@ -6,6 +6,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <input_manager.h>
+#include <std_image.h>
 
 Application::Application()
 {
