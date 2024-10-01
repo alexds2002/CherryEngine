@@ -44,9 +44,9 @@ void Application::Update(double deltaTime)
     glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
 
     // Create Renderer2D instance
-    // TODO(Alex): remove absolute paths to the shaders
-    Renderer2D renderer("/home/default/education/education/lectures/OpenGL/core/render/vertex_shader.glsl",
-                        "/home/default/education/education/lectures/OpenGL/core/render/fragment_shader.glsl",
+    // the files user relative to the executable paths
+    Renderer2D renderer("../core/render/vertex_shader.glsl",
+                        "../core/render/fragment_shader.glsl",
                         projection);
 
     // Load multiple textures
@@ -63,8 +63,6 @@ void Application::Update(double deltaTime)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Use Renderer
-
-        // Draw multiple textured quads with different positions and textures
         renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), texture1);  // Quad with texture1
 
         // Swap the screen buffers

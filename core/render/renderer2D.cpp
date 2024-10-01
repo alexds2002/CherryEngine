@@ -120,3 +120,4 @@ void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, unsi
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
+
