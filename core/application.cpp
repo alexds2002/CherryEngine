@@ -50,7 +50,7 @@ void Application::Update(double deltaTime)
                         projection);
 
     // Load multiple textures
-    unsigned int texture1 = renderer.loadTextureFromFile("../data/berserk.png");
+    unsigned int texture1 = renderer.loadTextureFromFile("../assets/berserk.png");
 
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
