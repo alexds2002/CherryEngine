@@ -1,6 +1,7 @@
 #include "application.h"
 #include "window.hpp"
 #include "render/renderer2D.h"
+#include "render/basic_texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -49,8 +50,8 @@ void Application::Update(double deltaTime)
                         "../core/render/fragment_shader.glsl",
                         projection);
 
-    // Load multiple textures
-    unsigned int texture1 = renderer.loadTextureFromFile("../assets/berserk.png");
+    // Load multiple textures using Texture class
+    Texture texture1("../assets/berserk.png");
 
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
@@ -63,7 +64,7 @@ void Application::Update(double deltaTime)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Use Renderer
-        renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), texture1);  // Quad with texture1
+        renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), texture1); // Quad with texture1
 
         // Swap the screen buffers
         glfwSwapBuffers(m_window->GetGLFWwindow());
