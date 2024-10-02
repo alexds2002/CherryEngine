@@ -8,6 +8,8 @@
 #include <input_manager.h>
 #include <project_definitions.h>
 #include <debug_logger_component.h>
+#include <resource_manager.h>
+#include <memory>
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
@@ -50,8 +52,7 @@ void Application::Update(double deltaTime)
                         "../core/render/fragment_shader.glsl",
                         projection);
 
-    // Load multiple textures using Texture class
-    Texture texture1("../assets/berserk.png");
+    std::unique_ptr<ResourceManager> rss_manager = std::make_unique<ResourceManager>();
 
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
@@ -63,8 +64,9 @@ void Application::Update(double deltaTime)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        auto image = rss_manager->GetTexturePtr("berserk.png");
         // Use Renderer
-        renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), texture1); // Quad with texture1
+        renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), rss_manager->GetTexturePtr("berserk.png")); // Quad with texture1
 
         // Swap the screen buffers
         glfwSwapBuffers(m_window->GetGLFWwindow());

@@ -64,7 +64,7 @@ void Renderer2D::initRenderData()
     glBindVertexArray(0);
 }
 
-void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Texture& texture)
+void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, std::shared_ptr<Texture> texture)
 {
     // Activate the shader
     shader.use();
@@ -76,7 +76,7 @@ void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, cons
     shader.setMat4("uModel", model);
 
     // Bind texture using the Texture class
-    texture.bind();
+    texture->bind();
 
     // Render the quad
     glBindVertexArray(VAO);
