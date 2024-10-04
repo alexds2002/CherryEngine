@@ -37,8 +37,8 @@ bool Application::Init()
 
     InputManager::GetInstance()->Init(m_window->GetGLFWwindow()); // Init after m_window is initialized!
 
-    m_window->SetVSyncOn(); // vsync on by default
-    return true; // success
+    m_window->SetVSyncOn();
+    return true;
 }
 
 void Application::Update(double deltaTime)
@@ -57,17 +57,14 @@ void Application::Update(double deltaTime)
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
     {
-        // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions.
         InputManager::GetInstance()->PollEvents();
 
-        // Clear the colorbuffer
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Use Renderer
         renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), rss_manager->GetTexturePtr("berserk.png")); // Quad with texture1
 
-        // Swap the screen buffers
         glfwSwapBuffers(m_window->GetGLFWwindow());
     }
 }
