@@ -64,7 +64,6 @@ void Application::Update(double deltaTime)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        auto image = rss_manager->GetTexturePtr("berserk.png");
         // Use Renderer
         renderer.drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), rss_manager->GetTexturePtr("berserk.png")); // Quad with texture1
 
