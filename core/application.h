@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Singleton.h>
+#include <singleton.h>
 #include <memory>
 
 class Window;

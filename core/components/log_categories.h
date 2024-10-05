@@ -6,7 +6,7 @@
  */
 
 #include <map>
-#include <Singleton.h>
+#include <singleton.h>
 #include <project_definitions.h>
 
 /**

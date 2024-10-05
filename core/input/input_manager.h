@@ -14,7 +14,7 @@
 #include <functional>
 #include <unordered_map>
 
-#include <Singleton.h>
+#include <singleton.h>
 #include <project_definitions.h>
 
 class GLFWwindow;
