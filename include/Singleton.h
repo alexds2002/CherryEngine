@@ -1,8 +1,10 @@
 #pragma once
 
+#include <mutex>
+
 /**
  * @file Singleton.h
- * @brief A template class for implementing the Singleton design pattern.
+ * @brief A thread-safe template class for implementing the Singleton design pattern.
  *
  * The `Singleton` class provides a simple way to create a singleton instance
  * of a class using the Curiously Recurring Template Pattern (CRTP). It ensures that
@@ -32,12 +34,21 @@ public:
      *
      * If the instance does not exist, it is created. This method returns a pointer
      * to the singleton instance.
+     * The Double-Checked Locking Pattern for optimized thread safety, if the program uses the GetInstance
+     * function N times with this pattern the lock will be aquired only the first time instead of N times.
      *
      * @return T* A pointer to the singleton instance.
      */
     static T* GetInstance()
     {
-        if(!m_instance) m_instance = new T;
+        if(!m_instance)
+        {
+            const std::lock_guard<std::mutex> lock(m_lock);
+            if(!m_instance)
+            {
+                m_instance = new T;
+            }
+        }
         return m_instance;
     }
 
@@ -46,12 +57,20 @@ public:
      *
      * If the instance does not exist, it is created. This method returns a reference
      * to the singleton instance.
+     * The Double-Checked Locking Pattern for optimized thread safety.
      *
      * @return T& A reference to the singleton instance.
      */
     static T& GetRef()
     {
-        if(!m_instance) m_instance = new T;
+        if(!m_instance)
+        {
+            const std::lock_guard<std::mutex> lock(m_lock);
+            if(!m_instance)
+            {
+                m_instance = new T;
+            }
+        }
         return *m_instance;
     }
 
@@ -60,11 +79,16 @@ public:
      *
      * This method deletes the singleton instance and sets the instance pointer to null.
      * All references to the singleton instance will be invalid after this method is called.
+     * The Double-Checked Locking Pattern for optimized thread safety.
      */
     static void DestroyInstance()
     {
-        delete m_instance;
-        m_instance = nullptr;
+        if(m_instance)
+        {
+            std::lock_guard<std::mutex> lock(m_lock);
+            delete m_instance;
+            m_instance = nullptr;
+        }
     }
 
     /**
@@ -105,5 +129,11 @@ private:
      * inlined so it can be class initialized
      */
     inline static T* m_instance{nullptr};
+    /**
+     * @brief Static mutex for thread safety.
+     *
+     * Avoids memory leaks as two threads can create a race condition with the m_instance.
+     */
+    inline static std::mutex m_lock{};
 };
 
