@@ -1,7 +1,6 @@
 #include <resource_manager.h>
 #include "../render/basic_texture.h"
 
-#include <fstream>
 #include <filesystem>
 #include <iostream>
 
@@ -15,16 +14,16 @@ void ResourceManager::LoadResources()
     // The path to the assets folder
     std::string path_to_data = "../assets";
 
-    for(const auto& cur_path : std::filesystem::directory_iterator(path_to_data))
+    for(const auto& cur_path : std::filesystem::recursive_directory_iterator(path_to_data))
     {
-        if(!std::filesystem::is_directory(cur_path))
+        // skip folder names
+        if(std::filesystem::is_directory(cur_path)) { continue; }
+
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>("../assets/" + cur_path.path().filename().string());
+        if(m_textures.count(cur_path.path().filename().string()) == 0)
         {
-            std::shared_ptr<Texture> texture = std::make_shared<Texture>("../assets/" + cur_path.path().filename().string());
-            if(m_textures.count(cur_path.path().filename().string()) == 0)
-            {
-                // TODO(Alex): asssosiate the textures with a key different then their name
-                m_textures[cur_path.path().filename().string()] = texture;
-            }
+            // TODO(Alex): asssosiate the textures with a key different then their name
+            m_textures[cur_path.path().filename().string()] = texture;
         }
     }
 }
