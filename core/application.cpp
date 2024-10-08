@@ -1,7 +1,6 @@
 #include "application.h"
 #include "window.hpp"
 #include "render/renderer2D.h"
-#include "render/basic_texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
