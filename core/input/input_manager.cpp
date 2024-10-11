@@ -65,8 +65,20 @@ static void HandleMouseEvent(GLFWwindow* window, int mouse_button, int action, i
  */
 static void HandleMouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-    // Currently, no actions are performed within this function.
-    // TODO(Alex): update mouse position value here
+    Position pos(static_cast<int>(xpos), static_cast<int>(ypos));
+    InputManager::GetInstance()->DispatchMouseMoveEvent(pos);
+    InputManager::GetInstance()->SetMousePosition(pos);
+}
+
+/**
+ * @brief Call all connected to MouseMoveEvent
+ **/
+void InputManager::DispatchMouseMoveEvent(Position pos)
+{
+    for(const auto& [key, func] : m_mouseMoveCallbacks)
+    {
+        func(pos.x, pos.y);
+    }
 }
 
 void InputManager::Init(GLFWwindow* window)
@@ -157,6 +169,37 @@ void InputManager::BindAction(KeyCode key, KeyState state, std::function<void()>
 }
 
 /**
+ * @brief Binds a callback function to a specific key and state.
+ *
+ *  InputManager::GetInstance()->BindToMoseMove([](int x, int y){ Debug_Log("Not hi"); });
+ *
+ * @return reference to the conncected function
+ *
+ * @note The reference can then be used to disconnect the callback.
+ *
+ * @warning If you do not store the ID you will not be able to dissconect the callback easily
+ * @warning The signeture of the fucntion must be function<void(int,int)> or equivelent lambda
+ **/
+uint64_t InputManager::BindToMouseMove(const std::function<void(int,int)>& callback)
+{
+    m_mouseMoveCallbacks[m_mouseMoveIDs++] = callback;
+    return m_mouseMoveIDs - 1; // return the ID(used for disconnecting)
+}
+
+/**
+ * @brief Disconnects the callback
+ **/
+void InputManager::DisconnectMouseMove(uint64_t disconnectID)
+{
+    m_mouseMoveCallbacks.erase(disconnectID);
+}
+
+void InputManager::SetMousePosition(Position pos)
+{
+    m_mousePosition = pos;
+}
+
+/**
  * @brief Retrieves the current mouse position as a Position object.
  *
  * This function returns the current position of the mouse cursor
@@ -164,7 +207,7 @@ void InputManager::BindAction(KeyCode key, KeyState state, std::function<void()>
  *
  * @return Position The current mouse position.
  */
-Position InputManager::GetMousePosition()
+Position InputManager::GetMousePosition() const noexcept
 {
     return m_mousePosition;
 }
@@ -176,7 +219,7 @@ Position InputManager::GetMousePosition()
  *
  * @return double The current X coordinate of the mouse.
  */
-double InputManager::GetMouseX()
+double InputManager::GetMouseX() const noexcept
 {
     return m_mousePosition.x;
 }
@@ -188,7 +231,7 @@ double InputManager::GetMouseX()
  *
  * @return double The current Y coordinate of the mouse.
  */
-double InputManager::GetMouseY()
+double InputManager::GetMouseY() const noexcept
 {
     return m_mousePosition.y;
 }

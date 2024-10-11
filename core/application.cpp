@@ -52,6 +52,7 @@ void Application::Update(double deltaTime)
                         projection);
 
     std::unique_ptr<ResourceManager> rss_manager = std::make_unique<ResourceManager>();
+    InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl;});
 
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))

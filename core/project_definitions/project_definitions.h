@@ -6,8 +6,11 @@
 
 struct Position
 {
-    double x;
-    double y;
+    Position() = default;
+    Position(int _x, int _y) { x = _x; y = _y; }
+
+    double x{0};
+    double y{0};
 };
 
 

@@ -88,8 +88,8 @@ inline ThreadPool::~ThreadPool()
  *
  * This function allows you to enqueue a task to the thread pool. The task is
  * represented by a callable (a function, lambda, or functor) and its associated
- * arguments. The task will be executed asynchronously by one of the threads in 
- * the pool, and a `std::future` is returned, which allows you to retrieve the 
+ * arguments. The task will be executed asynchronously by one of the threads in
+ * the pool, and a `std::future` is returned, which allows you to retrieve the
  * result of the task once it has been completed.
  *
  * @tparam Callable The type of the callable (e.g., a function, lambda, or functor).
