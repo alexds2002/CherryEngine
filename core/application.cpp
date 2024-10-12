@@ -53,6 +53,7 @@ void Application::Update(double deltaTime)
 
     std::unique_ptr<ResourceManager> rss_manager = std::make_unique<ResourceManager>();
     InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl;});
+    InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl;});
 
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))

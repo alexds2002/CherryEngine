@@ -76,6 +76,9 @@ public:
     void BindAction(KeyCode key, KeyState state, std::function<void()> callback);
 
     /* Bind any function */
+    void BindMouseEvent(MouseKeyCode mouse_key, KeyState state, std::function<void()> callback);
+
+    /* Bind any function */
     uint64_t BindToMouseMove(const std::function<void(int,int)>& callback);
     /* Disconnect function by id */
     void DisconnectMouseMove(uint64_t disconnectID);
@@ -93,6 +96,15 @@ public:
      *       on the current key.
      **/
     void DispatchKeyEvent(KeyCode key, KeyState state);
+
+    /**
+     * @brief Dispatches a mouse button event.
+     *
+     * This method is called to handle a mouse events, triggering the associated
+     * callback functions.
+     *
+     **/
+    void DispatchMouseEvent(MouseKeyCode mouseKeyCode, KeyState state);
 
     /**
      * @brief Dispatches a mouse move event.
@@ -142,6 +154,15 @@ private:
      * Each key can have multiple associated callbacks for different states.
      **/
     std::unordered_map<KeyCode, std::unordered_map<KeyState, std::vector<std::function<void()>>>> m_eventKeyCallbacks;
+
+    /**
+     * @brief A map to store mosue event callbacks.
+     *
+     * This structure maps `MouseKeyCode` to `KeyState`, allowing for efficient
+     * O(1) insertion and retrieval of callback functions for key events.
+     * Each key can have multiple associated callbacks for different states.
+     **/
+    std::unordered_map<MouseKeyCode, std::unordered_map<KeyState, std::vector<std::function<void()>>>> m_mouseEventKeyCallbacks;
 
     /**
      * @brief A map to store Mouse Move Event Callbacks

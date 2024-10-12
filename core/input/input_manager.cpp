@@ -46,7 +46,7 @@ static void HandleKeyEvent(GLFWwindow* window, int key, int scancode, int action
  */
 static void HandleMouseEvent(GLFWwindow* window, int mouse_button, int action, int mods)
 {
-    InputManager::GetInstance()->DispatchKeyEvent(static_cast<KeyCode>(mouse_button), static_cast<KeyState>(action));
+    InputManager::GetInstance()->DispatchMouseEvent(static_cast<MouseKeyCode>(mouse_button), static_cast<KeyState>(action));
 }
 
 /**
@@ -117,7 +117,7 @@ void InputManager::PollEvents()
  * @code
  * inputManager.DispatchKeyEvent(W_KEY, KEY_PRESSED);
  * @endcode
- */
+ **/
 
 void InputManager::DispatchKeyEvent(KeyCode key, KeyState state)
 {
@@ -130,6 +130,47 @@ void InputManager::DispatchKeyEvent(KeyCode key, KeyState state)
     for(auto& callback : callbacks)
     {
         callback();
+    }
+}
+
+/**
+ * @brief Dispatches all callbacks associated with a specific mouse key and state.
+ *
+ * This function checks if there are any registered callbacks for the given
+ * key (`MouseKeyCode`) and state (`KeyState`). If such callbacks exist, they are
+ * executed in the order they were registered. If no callbacks are found for
+ * the key or state, the function does nothing and returns early.
+ *
+ * @param key The `MouseKeyCode` representing the mouse key that was pressed or released.
+ * @param state The `KeyState` representing the state of the key (e.g., CHERRY_PRESS, CHERRY_RELEASE).
+ *
+ * @details
+ * - The function first looks up the `key` in the `m_eventKeyCallbacks` map.
+ *   If no entry exists for the key, it returns immediately.
+ * - If the `key` exists, it then checks if there are any callbacks for the
+ *   specific `state` (e.g., pressed or released). If no callbacks exist for
+ *   that state, it returns immediately.
+ * - If callbacks are found, it loops through the list of callbacks and invokes
+ *   each one in the order they were registered.
+ *
+ * Example usage:
+ * @code
+ * inputManager.DispatchMouseEvent(CHERRY_MOUSE_BUTTON_1, KEY_PRESSED, [](){ std::cout << "important function" << std::endl; });
+ * @endcode
+ **/
+void InputManager::DispatchMouseEvent(MouseKeyCode mouseKeyCode, KeyState state)
+{
+    const auto& state_map = m_mouseEventKeyCallbacks.find(mouseKeyCode);
+    // return if no functions are connected to this mouse key
+    if(state_map == m_mouseEventKeyCallbacks.end()) return;
+
+    const auto& callbacks = state_map->second.find(state);
+    // return if no functions are connected to this state on the current mouse button
+    if(callbacks == state_map->second.end()) return;
+
+    for(const auto& func : callbacks->second)
+    {
+        func();
     }
 }
 
@@ -166,6 +207,15 @@ void InputManager::DispatchKeyEvent(KeyCode key, KeyState state)
 void InputManager::BindAction(KeyCode key, KeyState state, std::function<void()> callback)
 {
     m_eventKeyCallbacks[key][state].push_back(callback);
+}
+
+/**
+ * @brief Binds a callback function to a specific mouse key and state.
+ * Functions like BindAction.
+ **/
+void InputManager::BindMouseEvent(MouseKeyCode mouse_key, KeyState state, std::function<void()> callback)
+{
+    m_mouseEventKeyCallbacks[mouse_key][state].push_back(callback);
 }
 
 /**
