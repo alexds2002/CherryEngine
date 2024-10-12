@@ -14,8 +14,10 @@ editor/
     (Engine's Visual Editor)
 include/
     resource_manager.h  (Header for engine-wide access)
+include/
+    (Project wide include libraries)
 libs/
-    ThirdPartyLibraries/  (External libraries stay here. Glfw, glad, stb_image...)
+    ThirdPartyLibraries/  (External libraries stay here. Glfw, glad...)
 assets/
     Textures, models, sounds, etc.
 sandbox/ - Not stable

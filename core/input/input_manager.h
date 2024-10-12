@@ -1,13 +1,11 @@
 #pragma once
 
 /*
- * The InputManager is going to function like an observer. It will have clients connected to events(key pressed, mouse pressed...)
+ * The InputManager is going to function like an observer. It will have clients connected to events(key pressed, mouse pressed, mouse moved)
  * and will dispatch each time a key is pressed on the current window.
  *
- * TODO(Alex): Add the functionality to Unregister by ID returned from BindAction.
  * TODO(Alex): add templated version like the thread pool one. Currently supports only void().
- * TODO(Alex): add move semantics optimizations.
- * TODO(Alex): add option for dispatch on current key without state
+ * TODO(Alex): add move semantics optimization.
  */
 
 #include <vector>

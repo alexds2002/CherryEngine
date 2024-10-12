@@ -20,7 +20,7 @@ Application::Application()
 Application::~Application()
 {
     // Terminate GLFW, clearing any resources allocated by GLFW.
-    // TODO: if you have multiple application instances you might not want to do that?
+    // WARNING: if you have multiple application instances you might not want to do that?
     glfwTerminate();
 }
 
