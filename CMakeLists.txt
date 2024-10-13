@@ -24,6 +24,8 @@ endif()
 add_subdirectory(libs/glm)
 # Add the GLFW submodule
 add_subdirectory(libs/glfw)
+# Add the game(runtime) as a library
+add_subdirectory(game)
 
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
@@ -38,7 +40,7 @@ file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS editor/*.cpp
 
 # Tell cmake to build the sandbox
 if (BUILD_SANDBOX)
-    message("-- Sandbox build")
+    message("-- Build sandbox")
     file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS sandbox/*.cpp
                                                         sandbox/*.hpp
                                                         sandbox/*.h)
@@ -53,10 +55,11 @@ add_executable(${PROJECT_NAME}
                libs/glad/generated/src/gl.c)
 
 # Tell CMake to include GLM headers
+# Include the GLAD headers...
 include_directories(libs/glm)
-# Include the GLAD headers
-include_directories(${PROJECT_NAME} PRIVATE libs/glad/generated/include)
 include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(${PROJECT_NAME} PRIVATE libs/glad/generated/include)
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/project_definitions)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/thread_pool)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/core/components)
@@ -70,3 +73,5 @@ target_link_directories(${PROJECT_NAME} PRIVATE libs/glfw/src)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL glfw glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
+target_link_libraries(${PROJECT_NAME} PUBLIC game_lib)
+
