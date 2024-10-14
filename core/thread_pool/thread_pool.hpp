@@ -53,11 +53,13 @@ inline ThreadPool::ThreadPool(uint32_t _number_of_threads) noexcept : m_threads_
                 {
                     /* lock critical code */
                     std::unique_lock<std::mutex> lock(this->m_mutex);
+                    /* condition variable unlocks while waiting */
                     this->m_condition_var.wait(lock,
                             [this]()
                             {
                                 return this->m_force_stop || !this->m_tasks.empty();
                             });
+                    /* condition variable locks after being awaken from notify_one() */
                     if(this->m_force_stop && this->m_tasks.empty())
                     {
                         return;
