@@ -2,9 +2,6 @@
 
 #include <input_manager.h>
 
-namespace CherrY
-{
-
 void Game::Init()
 {
 }
@@ -28,4 +25,3 @@ void Game::BindMouseMoveAction(std::function<void(int,int)> callback)
     InputManager::GetInstance()->BindToMouseMove(callback);
 }
 
-} // namespace CherrY

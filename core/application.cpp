@@ -1,6 +1,7 @@
 #include "application.h"
 #include "window.hpp"
 #include "render/renderer2D.h"
+#include "../game/game.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,6 +29,7 @@ bool Application::Init()
 {
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Loading Cherry Engine...");
     m_window = std::make_unique<Window>();
+    m_game = std::make_unique<Game>();
     if(!m_window->Init())
     {
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
@@ -42,6 +44,7 @@ bool Application::Init()
 
 void Application::Update(double deltaTime)
 {
+    m_game->Update();
     // Orthographic projection matrix
     glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
 

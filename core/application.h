@@ -4,6 +4,7 @@
 #include <memory>
 
 class Window;
+class Game;
 
 /**
  * @file Application.h
@@ -75,4 +76,6 @@ private:
      * with the GLFW window created within the Window class.
      */
     std::unique_ptr<Window> m_window;
+
+    std::unique_ptr<Game> m_game;
 };
