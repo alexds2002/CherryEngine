@@ -5,6 +5,8 @@
 
 class Window;
 class Game;
+struct Position;
+class Renderer2D;
 
 /**
  * @file Application.h
@@ -68,6 +70,9 @@ public:
      */
     void Update(double deltaTime = 0);
 
+    /* TODO(Alex): add alighments */
+    void RenderTexture(Position pos, int xSize, int ySize, const std::string& key);
+
 private:
     /**
      * @brief Unique pointer to the Window instance.
@@ -78,4 +83,6 @@ private:
     std::unique_ptr<Window> m_window;
 
     std::unique_ptr<Game> m_game;
+
+    std::unique_ptr<Renderer2D> m_renderer2D;
 };

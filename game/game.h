@@ -6,7 +6,7 @@
 class Game
 {
 public:
-    void Init();
+    bool Init();
     void Update();
     void BindAction();
     void BindKeyAction(KeyCode key, KeyState state, std::function<void()> callback);

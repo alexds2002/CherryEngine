@@ -2,8 +2,9 @@
 
 #include <input_manager.h>
 
-void Game::Init()
+bool Game::Init()
 {
+    return true; // success
 }
 
 void Game::Update()

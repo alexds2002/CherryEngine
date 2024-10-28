@@ -12,6 +12,8 @@ class Shader
 public:
     unsigned int ID;
 
+    Shader() = default;
+
     Shader(const char* vertexPath, const char* fragmentPath)
     {
         // 1. Retrieve the vertex/fragment source code from filePath

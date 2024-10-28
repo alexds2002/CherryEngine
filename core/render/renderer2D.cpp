@@ -7,21 +7,22 @@
 #endif
 #include <stb_image.h>
 
-Renderer2D::Renderer2D(const char* vertexShaderPath, const char* fragmentShaderPath, const glm::mat4& projection)
-    : shader(vertexShaderPath, fragmentShaderPath)
-{
-    // Initialize the shader and set projection matrix
-    shader.use();
-    shader.setMat4("uProjection", projection);
-    initRenderData();
-}
-
 Renderer2D::~Renderer2D()
 {
     // Clean up resources
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+}
+
+bool Renderer2D::Init(const char* vertexShaderPath, const char* fragmentShaderPath, const glm::mat4& projection)
+{
+    m_shader = Shader(vertexShaderPath, fragmentShaderPath);
+    // Initialize the shader and set projection matrix
+    m_shader.use();
+    m_shader.setMat4("uProjection", projection);
+    initRenderData();
+    return true; // success
 }
 
 void Renderer2D::initRenderData()
@@ -67,13 +68,13 @@ void Renderer2D::initRenderData()
 void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, std::shared_ptr<Texture> texture)
 {
     // Activate the shader
-    shader.use();
+    m_shader.use();
 
     // Model matrix for the quad
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(position, 0.0f));
     model = glm::scale(model, glm::vec3(size, 1.0f));
-    shader.setMat4("uModel", model);
+    m_shader.setMat4("uModel", model);
 
     // Bind texture using the Texture class
     texture->bind();
