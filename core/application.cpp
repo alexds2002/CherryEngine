@@ -31,6 +31,7 @@ bool Application::Init()
     m_window = std::make_unique<Window>();
     m_game = std::make_unique<Game>();
     m_renderer2D = std::make_unique<Renderer2D>();
+    m_rssManager = std::make_unique<ResourceManager>();
 
     if(!m_game->Init())
     {
@@ -41,6 +42,8 @@ bool Application::Init()
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
     }
+    m_rssManager->LoadResources();
+
     InputManager::GetInstance()->Init(m_window->GetGLFWwindow()); // Init after m_window is initialized!
 
     m_window->SetVSyncOn();
@@ -62,7 +65,6 @@ void Application::Update(double deltaTime)
         Debug_Log(ELogCategory::Error, EPrintColor::Red, true, "Renderer2D failed to initialize!");
     }
 
-    std::unique_ptr<ResourceManager> rss_manager = std::make_unique<ResourceManager>();
     InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl;});
     InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl;});
 
@@ -75,7 +77,7 @@ void Application::Update(double deltaTime)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Use Renderer
-        m_renderer2D->drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), rss_manager->GetTexturePtr("berserk.png")); // Quad with texture1
+        m_renderer2D->drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), m_rssManager->GetTexturePtr("berserk.png")); // Quad with texture1
 
         glfwSwapBuffers(m_window->GetGLFWwindow());
     }

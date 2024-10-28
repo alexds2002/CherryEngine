@@ -18,12 +18,12 @@ public:
 
     std::shared_ptr<Texture> GetTexturePtr(const std::string& name);
     Texture& GetTexture(const std::string& name);
+    void LoadResources();
 
 private:
     /*
      * Loads all resources from assets folders.
      */
-    void LoadResources();
 
     std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
 };

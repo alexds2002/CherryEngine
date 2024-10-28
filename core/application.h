@@ -5,8 +5,9 @@
 
 class Window;
 class Game;
-struct Position;
 class Renderer2D;
+class ResourceManager;
+struct Position;
 
 /**
  * @file Application.h
@@ -70,8 +71,10 @@ public:
      */
     void Update(double deltaTime = 0);
 
-    /* TODO(Alex): add alighments */
-    void RenderTexture(Position pos, int xSize, int ySize, const std::string& key);
+    /**
+     * @brief The current main interface for drawing a texture on the screen.
+     */
+    void RenderTexture(Position pos, int xSize, int ySize, const std::string& key); /* TODO(Alex): add alighments */
 
 private:
     /**
@@ -85,4 +88,6 @@ private:
     std::unique_ptr<Game> m_game;
 
     std::unique_ptr<Renderer2D> m_renderer2D;
+
+    std::unique_ptr<ResourceManager> m_rssManager;
 };

@@ -6,9 +6,10 @@
 
 ResourceManager::ResourceManager()
 {
-    LoadResources();
 }
 
+// Loads all resources from the assets folder
+// Currently supports only texutres
 void ResourceManager::LoadResources()
 {
     // The path to the assets folder
