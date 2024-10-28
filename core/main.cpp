@@ -1,5 +1,6 @@
 #include "application.h"
 #include <heap_memory_track_component.h>
+#include <debug_logger_component.h>
 
 #ifdef DEBUG_MODE
 // TRACK_HEAP_AND_LEAKS() // start tracking heap
@@ -11,7 +12,7 @@ int main(int argc, char* argv[])
     Application* App = Application::GetInstance();
     if(!App->Init())
     {
-        std::cout << "Application count not Init!" << std::endl;
+        Debug_Log(ELogCategory::Error, "Application could not Init!");
     }
     App->Update();
     return EXIT_SUCCESS;

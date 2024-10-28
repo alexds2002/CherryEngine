@@ -33,6 +33,11 @@ bool Application::Init()
     m_renderer2D = std::make_unique<Renderer2D>();
     m_rssManager = std::make_unique<ResourceManager>();
 
+    // Orthographic projection matrix
+    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
+    const char* vertex_shared_key = "../core/render/vertex_shader.glsl";
+    const char* fragment_shared_key = "../core/render/fragment_shader.glsl";
+
     if(!m_game->Init())
     {
         Debug_Log(ELogCategory::Error, "Game cound not be initilzed!");
@@ -42,35 +47,26 @@ bool Application::Init()
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
     }
-    m_rssManager->LoadResources();
-
+    if(!m_renderer2D->Init(vertex_shared_key, fragment_shared_key, projection))
+    {
+        Debug_Log(ELogCategory::Error, EPrintColor::Red, true, "Renderer2D failed to initialize!");
+    }
     InputManager::GetInstance()->Init(m_window->GetGLFWwindow()); // Init after m_window is initialized!
 
+    m_rssManager->LoadResources();
     m_window->SetVSyncOn();
     return true;
 }
 
 void Application::Update(double deltaTime)
 {
-    m_game->Update();
-    // Orthographic projection matrix
-    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
-
-    bool renderer2d_initialized =
-        m_renderer2D->Init("../core/render/vertex_shader.glsl",
-                        "../core/render/fragment_shader.glsl",
-                        projection);
-    if(!renderer2d_initialized)
-    {
-        Debug_Log(ELogCategory::Error, EPrintColor::Red, true, "Renderer2D failed to initialize!");
-    }
-
-    InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl;});
-    InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl;});
+    InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl; });
+    InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl; });
 
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
     {
+        m_game->Update();
         InputManager::GetInstance()->PollEvents();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
