@@ -81,7 +81,3 @@ void Application::Update(double deltaTime)
     }
 }
 
-void Application::RenderTexture(Position pos, int xSize, int ySize, const std::string& key)
-{
-}
-

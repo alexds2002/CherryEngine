@@ -71,11 +71,6 @@ public:
      */
     void Update(double deltaTime = 0);
 
-    /**
-     * @brief The current main interface for drawing a texture on the screen.
-     */
-    void RenderTexture(Position pos, int xSize, int ySize, const std::string& key); /* TODO(Alex): add alighments */
-
 private:
     /**
      * @brief Unique pointer to the Window instance.
