@@ -15,7 +15,7 @@
  *
  */
 
-/* needed outside DEBUG_MODE to compile in all modes (EPrintColor)*/
+/* needed outside DEBUG_MODE to compile in all modes (EPrintColor, ELogCategories...) */
 #include <project_definitions.h>
 
 #ifdef DEBUG_MODE

@@ -1,6 +1,8 @@
 #include <resource_manager.h>
+
 #include "../render/basic_texture.h"
 
+#include <debug_logger_component.h>
 #include <filesystem>
 #include <iostream>
 
@@ -25,6 +27,11 @@ void ResourceManager::LoadResources()
         {
             // TODO(Alex): asssosiate the textures with a key different then their name
             m_textures[cur_path.path().filename().string()] = texture;
+        }
+        else
+        {
+            Debug_Log(ELogCategory::Error, EPrintColor::Red, "DUPLICATE KEY FOUND!: ", cur_path.path().filename().string());
+            Debug_Log(ELogCategory::Error, EPrintColor::Red, "This happens when two resources have the same name which leads to one of them being lost");
         }
     }
 }
