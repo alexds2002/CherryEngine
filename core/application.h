@@ -87,7 +87,7 @@ private:
 
     std::unique_ptr<Game> m_game;
 
-    std::unique_ptr<Renderer2D> m_renderer2D;
-
     std::unique_ptr<ResourceManager> m_rssManager;
+
+    std::shared_ptr<Renderer2D> m_renderer2D;
 };

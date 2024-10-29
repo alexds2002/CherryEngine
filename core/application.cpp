@@ -29,9 +29,10 @@ bool Application::Init()
 {
     Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Loading Cherry Engine...");
     m_window = std::make_unique<Window>();
-    m_game = std::make_unique<Game>();
-    m_renderer2D = std::make_unique<Renderer2D>();
     m_rssManager = std::make_unique<ResourceManager>();
+    m_renderer2D = std::make_shared<Renderer2D>();
+
+    m_game = std::make_unique<Game>(m_renderer2D);
 
     // Orthographic projection matrix
     glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);

@@ -1,6 +1,11 @@
 #include "game.h"
 
 #include <input_manager.h>
+#include "../core/render/renderer2D.h"
+
+Game::Game(const std::shared_ptr<Renderer2D>& renderer2D) : m_renderer2D(renderer2D)
+{
+}
 
 bool Game::Init()
 {
