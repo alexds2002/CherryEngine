@@ -38,14 +38,15 @@ bool Application::Init()
     const char* vertex_shared_key = "../core/render/vertex_shader.glsl";
     const char* fragment_shared_key = "../core/render/fragment_shader.glsl";
 
-    if(!m_game->Init())
-    {
-        Debug_Log(ELogCategory::Error, "Game cound not be initilzed!");
-    }
+    // Set OpenGL context and loads glad so it must be initialized first
     if(!m_window->Init())
     {
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
+    }
+    if(!m_game->Init())
+    {
+        Debug_Log(ELogCategory::Error, "Game cound not be initilzed!");
     }
     if(!m_renderer2D->Init(vertex_shared_key, fragment_shared_key, projection))
     {
