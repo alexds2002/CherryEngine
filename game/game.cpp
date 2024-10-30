@@ -12,7 +12,7 @@ bool Game::Init()
     return true; // success
 }
 
-void Game::Update()
+void Game::Update(float deltaTime)
 {
 }
 

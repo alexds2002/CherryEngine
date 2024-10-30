@@ -34,8 +34,10 @@ public:
 
     /**
      * @brief Executes one update cycle of the game, including logic updates and rendering.
+     *
+     * @param deltaTime Time passed from the last frame.
      */
-    void Update();
+    void Update(float deltaTime=0.f);
 
     /**
      * @brief Binds a key action to a specified key and key state.

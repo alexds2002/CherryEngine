@@ -85,4 +85,6 @@ private:
     std::unique_ptr<ResourceManager> m_rssManager;
 
     std::shared_ptr<Renderer2D> m_renderer2D;
+
+    float m_deltaTime = 0.0f;
 };

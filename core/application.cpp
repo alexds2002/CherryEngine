@@ -57,18 +57,21 @@ bool Application::Init()
 
     m_rssManager->LoadResources();
     m_window->SetVSyncOn();
-    return true;
-}
 
-void Application::Update(double deltaTime)
-{
+    // Example uses of the InputManager
     InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl; });
     InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl; });
 
+    return true;
+}
+
+// TODO(Alex) move the while loop in the main.cpp file and calculate the deltatime
+void Application::Update(double deltaTime)
+{
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
     {
-        m_game->Update();
+        m_game->Update(m_deltaTime);
         InputManager::GetInstance()->PollEvents();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

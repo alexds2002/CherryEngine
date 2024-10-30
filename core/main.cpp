@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     {
         Debug_Log(ELogCategory::Error, "Application could not Init!");
     }
-    App->Update();
+    App->Update(); // Contains the main Update Loop
     return EXIT_SUCCESS;
 }
 
