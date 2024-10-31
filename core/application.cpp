@@ -8,8 +8,10 @@
 #include <input_manager.h>
 #include <project_definitions.h>
 #include <debug_logger_component.h>
+#include <release_logger_component.h>
 #include <resource_manager.h>
 #include <memory>
+#include <chrono>
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
@@ -56,7 +58,7 @@ bool Application::Init()
     InputManager::GetInstance()->Init(m_window->GetGLFWwindow()); // Init after m_window is initialized!
 
     m_rssManager->LoadResources();
-    m_window->SetVSyncOn();
+    m_window->SetVSyncOff();
 
     // Example uses of the InputManager
     InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl; });
@@ -66,20 +68,39 @@ bool Application::Init()
 }
 
 // TODO(Alex) move the while loop in the main.cpp file and calculate the deltatime
-void Application::Update(double deltaTime)
+void Application::Update()
 {
+    auto lastFrameTime = std::chrono::high_resolution_clock::now();
+    float timeAccumulator = 0.0f;
+    float frameCount = 0.0f;
+
     // Main loop
     while (!glfwWindowShouldClose(m_window->GetGLFWwindow()))
     {
+        // calculate delta time and fps
+        {
+            auto currentTime = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<float> delta = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            m_deltaTime = delta.count();
+
+            timeAccumulator += m_deltaTime;
+            frameCount++;
+            m_fps = frameCount / timeAccumulator;
+            Release_Log(static_cast<int>(m_fps));
+            if(timeAccumulator >= 1.0f)
+            {
+                timeAccumulator = 0.f;
+                frameCount = 0.f;
+            }
+        }
         m_game->Update(m_deltaTime);
         InputManager::GetInstance()->PollEvents();
-
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Use Renderer
         m_renderer2D->drawQuad(glm::vec2(400.0f, 350.0f), glm::vec2(100.0f, 100.0f), m_rssManager->GetTexturePtr("berserk.png")); // Quad with texture1
-
         glfwSwapBuffers(m_window->GetGLFWwindow());
     }
 }

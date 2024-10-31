@@ -69,7 +69,7 @@ public:
      *
      * @param deltaTime Time in seconds since the last update. Defaults to 0 if not specified.
      */
-    void Update(double deltaTime = 0);
+    void Update();
 
 private:
     /**
@@ -87,4 +87,5 @@ private:
     std::shared_ptr<Renderer2D> m_renderer2D;
 
     float m_deltaTime = 0.0f;
+    float m_fps = 0;
 };
