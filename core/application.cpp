@@ -9,6 +9,7 @@
 #include <project_definitions.h>
 #include <debug_logger_component.h>
 #include <release_logger_component.h>
+#include <debug_assert_component.h>
 #include <resource_manager.h>
 #include <memory>
 #include <chrono>
@@ -90,10 +91,14 @@ void Application::Update()
 
             timeAccumulator += m_deltaTime;
             frameCount++;
-            m_fps = frameCount / timeAccumulator;
-            // Release_Log(static_cast<int>(m_fps)); // log fps
+            m_fps = static_cast<int>(frameCount / timeAccumulator);
+
             if(timeAccumulator >= 1.0f)
             {
+                CHERRY_ASSERT(m_window->GetGLFWwindow() && strcmp(std::to_string(m_fps).c_str(), ""));
+                // set window title to the fps every second
+                glfwSetWindowTitle(m_window->GetGLFWwindow(), (m_window->GetTitle() + " " + std::to_string(m_fps) + "FPS").c_str());
+                // reset frames and timer
                 timeAccumulator = 0.f;
                 frameCount = 0.f;
             }

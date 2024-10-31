@@ -67,6 +67,11 @@ bool Window::DeInit()
     return true; // successful deinitialization
 }
 
+std::string Window::GetTitle()
+{
+    return m_data.windowName;
+}
+
 /* Returns the actual ptr to GLFWwindow */
 GLFWwindow* Window::GetGLFWwindow()
 {
@@ -83,4 +88,11 @@ void Window::SetVSyncOff()
 {
     m_data.VSync = false;
     glfwSwapInterval(0);
+}
+
+// Not tested
+void Window::SetTitle(const std::string& title)
+{
+    m_data.windowName = title;
+    glfwSetWindowTitle(m_window, title.c_str());
 }

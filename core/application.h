@@ -87,5 +87,6 @@ private:
     std::shared_ptr<Renderer2D> m_renderer2D;
 
     float m_deltaTime = 0.0f;
-    float m_fps = 0;
+    // rounded fps to a whole number
+    int m_fps = 0;
 };

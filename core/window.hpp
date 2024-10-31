@@ -19,6 +19,8 @@ public:
     void SetVSyncOn();
     void SetVSyncOff();
     GLFWwindow* GetGLFWwindow();
+    void SetTitle(const std::string& title);
+    std::string GetTitle();
 
 private:
     // Avoid multiple glfw initializations
