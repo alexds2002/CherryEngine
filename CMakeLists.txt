@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
 project(CherrY)
 
-# Build types are
-# Debug
-# Release
-message("-- CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+# Setup build type and compiler definition for optimizations
+# Build types are Debug, Release
 if (NOT CMAKE_BUILD_TYPE STREQUAL "")
-    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
-    add_compile_definitions("${CMAKE_BUILD_TYPE}_MODE")
+    string(TOUPPER "${CMAKE_BUILD_TYPE}_MODE" CMAKE_BUILD_TYPE)
+    add_compile_definitions(${CMAKE_BUILD_TYPE})
+else()
+    set(CMAKE_BUILD_TYPE "DEBUG_MODE")
+    message(WARNING "-- Build Type not specified... Setting DEBUG_MODE")
 endif()
+message(STATUS "-- CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 # TODO(Alex): Update to 23
 set(CMAKE_CXX_STANDARD 20)
@@ -16,8 +18,13 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if (CMAKE_BUILD_TYPE STREQUAL "DEBUG_MODE")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -Wall -g -O0")
+    message(STATUS "-- BUILD FLAGS -Wextra -Wall -g -O0")
 elseif(CMAKE_BUILD_TYPE STREQUAL "RELEASE_MODE")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+    message(STATUS "-- BUILD FLAGS -O3")
+else()
+    message(WARNING "-- UNKOWN BUILD TYPE!")
+    message(WARNING ${CMAKE_BUILD_TYPE})
 endif()
 
 # Add GLM as a subdirectory
@@ -40,7 +47,7 @@ file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS editor/*.cpp
 
 # Tell cmake to build the sandbox
 if (BUILD_SANDBOX)
-    message("-- Build sandbox")
+    message(STATUS "-- Build sandbox")
     file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS sandbox/*.cpp
                                                         sandbox/*.hpp
                                                         sandbox/*.h)
