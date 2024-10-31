@@ -29,7 +29,7 @@ Application::~Application()
 
 bool Application::Init()
 {
-    Debug_Log(ELogCategory::Default, EPrintColor::Magenta, "Loading Cherry Engine...");
+    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Starting Cherry Engine...");
     m_window = std::make_unique<Window>();
     m_rssManager = std::make_unique<ResourceManager>();
     m_renderer2D = std::make_shared<Renderer2D>();
@@ -42,27 +42,31 @@ bool Application::Init()
     const char* fragment_shared_key = "../core/render/fragment_shader.glsl";
 
     // Set OpenGL context and loads glad so it must be initialized first
+    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing Window...");
     if(!m_window->Init())
     {
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
     }
+    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing Game...");
     if(!m_game->Init())
     {
-        Debug_Log(ELogCategory::Error, "Game cound not be initilzed!");
+        Debug_Log(ELogCategory::Error, "Game cound not be initialized!");
     }
+    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing Renderer...");
     if(!m_renderer2D->Init(vertex_shared_key, fragment_shared_key, projection))
     {
         Debug_Log(ELogCategory::Error, EPrintColor::Red, true, "Renderer2D failed to initialize!");
     }
+    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing InputManager...");
     InputManager::GetInstance()->Init(m_window->GetGLFWwindow()); // Init after m_window is initialized!
 
     m_rssManager->LoadResources();
     m_window->SetVSyncOff();
 
     // Example uses of the InputManager
-    InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl; });
-    InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl; });
+    // InputManager::GetInstance()->BindToMouseMove([](int x, int y){ std::cout << x << " " << y << std::endl; });
+    // InputManager::GetInstance()->BindMouseEvent(CHERRY_MOUSE_BUTTON_1, CHERRY_PRESS, [](){ std::cout << "Mouse clicked" << std::endl; });
 
     return true;
 }
@@ -87,7 +91,7 @@ void Application::Update()
             timeAccumulator += m_deltaTime;
             frameCount++;
             m_fps = frameCount / timeAccumulator;
-            Release_Log(static_cast<int>(m_fps));
+            // Release_Log(static_cast<int>(m_fps)); // log fps
             if(timeAccumulator >= 1.0f)
             {
                 timeAccumulator = 0.f;
