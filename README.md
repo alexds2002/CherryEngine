@@ -1,3 +1,5 @@
+A Game Engine that supports basic 2D rendering, input managment, resource handling and a bunch of tools.
+
 BUILDING:
 Unix Makefiles is for unix based systems
 1. mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" ..
