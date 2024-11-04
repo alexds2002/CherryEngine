@@ -7,7 +7,7 @@ Unix Makefiles is for unix based systems
 2. make -j4 # build using 4 threads
 
 OR run the script from the root directory
-python build_and_run.py
+"python build_and_run.py"
 
 Note: if you want to build the sandbox(playground) pass -D BUILD_SANDBOX=true
 
