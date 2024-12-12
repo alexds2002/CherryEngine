@@ -6,5 +6,5 @@ def main():
     # Generates unix make files instead of the Windows equivelent
     os.system('cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && make -j4 && ./CherrY')
 
-if name == "__main__":
+if __name__ == "__main__":
     main()
