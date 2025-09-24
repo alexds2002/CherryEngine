@@ -7,7 +7,7 @@ file(GLOB_RECURSE GAME_SOURCES CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/*.h
     )
 
-add_library(game_lib ${GAME_SOURCES})
+add_library(runtime_lib ${GAME_SOURCES})
 
 # set inlcude directories for easy header access
 set(GAME_INCLUDE_DIRECTORIES
@@ -20,4 +20,4 @@ set(GAME_INCLUDE_DIRECTORIES
     ${CMAKE_SOURCE_DIR}/libs/glad/generated/include
     ${OPENGL_INCLUDE_DIRS})
 
-target_include_directories(game_lib PUBLIC ${GAME_INCLUDE_DIRECTORIES})
+target_include_directories(runtime_lib PUBLIC ${GAME_INCLUDE_DIRECTORIES})

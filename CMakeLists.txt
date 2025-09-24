@@ -31,8 +31,8 @@ endif()
 add_subdirectory(libs/glm)
 # Add the GLFW submodule
 add_subdirectory(libs/glfw)
-# Add the game(runtime) as a library
-add_subdirectory(game)
+# Add the runtime(game) as a library
+add_subdirectory(runtime)
 
 find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
@@ -80,5 +80,5 @@ target_link_directories(${PROJECT_NAME} PRIVATE libs/glfw/src)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL glfw glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
-target_link_libraries(${PROJECT_NAME} PUBLIC game_lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC runtime_lib)
 

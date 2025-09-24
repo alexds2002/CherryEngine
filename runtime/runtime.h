@@ -7,33 +7,33 @@
 class Renderer2D;
 
 /**
- * @class Game
- * @brief Manages the runtime of the game engine, including initialization, updates, and input handling.
+ * @class Runtime
+ * @brief Manages the runtime of the runtime engine, including initialization, updates, and input handling.
  *
- * The Game class serves as the core runtime class for the game engine. It initializes the game,
+ * The Runtime class serves as the core runtime class for the engine. It initializes the runtime,
  * manages the update cycle, and provides a framework for handling input through bindable actions.
  * The class is meant to provide abstraction from the core of the engine.
  * This class requires a Renderer2D object for rendering purposes, which is injected via dependency injection.
  */
-class Game
+class Runtime
 {
 public:
     /**
-     * @brief Constructs the Game with a Renderer2D dependency.
+     * @brief Constructs the Runtime with a Renderer2D dependency.
      *
      * @param renderer2D A shared pointer to a Renderer2D instance, used for rendering operations.
      */
-    explicit Game(const std::shared_ptr<Renderer2D>& renderer2D);
+    explicit Runtime(const std::shared_ptr<Renderer2D>& renderer2D);
 
     /**
-     * @brief Initializes the game and its components.
+     * @brief Initializes the runtime and its components.
      *
      * @return true if initialization succeeds, false otherwise.
      */
     bool Init();
 
     /**
-     * @brief Executes one update cycle of the game, including logic updates and rendering.
+     * @brief Executes one update cycle of the runtime, including logic updates and rendering.
      *
      * @param deltaTime Time passed from the last frame.
      */

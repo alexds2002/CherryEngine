@@ -1,7 +1,7 @@
 #include "application.h"
 #include "window.hpp"
 #include "render/renderer2D.h"
-#include "../game/game.h"
+#include "../runtime/runtime.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -35,7 +35,7 @@ bool Application::Init()
     m_rssManager = std::make_unique<ResourceManager>();
     m_renderer2D = std::make_shared<Renderer2D>();
 
-    m_game = std::make_unique<Game>(m_renderer2D);
+    m_runtime = std::make_unique<Runtime>(m_renderer2D);
 
     // Orthographic projection matrix
     glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
@@ -49,10 +49,10 @@ bool Application::Init()
         Debug_Log(ELogCategory::Error, "Window cound not be initilzed!");
         return false;
     }
-    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing Game...");
-    if(!m_game->Init())
+    Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing Runtime...");
+    if(!m_runtime->Init())
     {
-        Debug_Log(ELogCategory::Error, "Game cound not be initialized!");
+        Debug_Log(ELogCategory::Error, "Runtime cound not be initialized!");
     }
     Debug_Log(ELogCategory::Core, EPrintColor::LightGreen, "Initializing Renderer...");
     if(!m_renderer2D->Init(vertex_shared_key, fragment_shared_key, projection))
@@ -103,7 +103,7 @@ void Application::Update()
                 frameCount = 0.f;
             }
         }
-        m_game->Update(m_deltaTime);
+        m_runtime->Update(m_deltaTime);
         InputManager::GetInstance()->PollEvents();
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

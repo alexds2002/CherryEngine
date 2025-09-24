@@ -4,7 +4,7 @@
 #include <memory>
 
 class Window;
-class Game;
+class Runtime;
 class Renderer2D;
 class ResourceManager;
 struct Position;
@@ -80,7 +80,7 @@ private:
      */
     std::unique_ptr<Window> m_window;
 
-    std::unique_ptr<Game> m_game;
+    std::unique_ptr<Runtime> m_runtime;
 
     std::unique_ptr<ResourceManager> m_rssManager;
 
